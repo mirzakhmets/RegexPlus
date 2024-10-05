@@ -1,2 +1,2 @@
 # RegexPlus
- Extended Regular Expression Engine
+ Regular expression framework
