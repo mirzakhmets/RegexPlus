@@ -447,6 +447,82 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
+    public static final String alphabet = "abcd";
+
+    public static void ArbitraryTest1(int na, int nb) {
+        long t = System.currentTimeMillis();
+        Automaton automaton = new Automaton();
+        String part1 = "", part11 = "", part12 = "";
+        String part2 = "", part21 = "", part22 = "";
+
+        for (int i = 0; i < na; ++i) {
+            part11 += alphabet.charAt(i % alphabet.length()) + "*";
+        }
+
+        part11 = "(" + part11 + ")*";
+
+        for (int i = 0; i < nb; ++i) {
+            part21 += alphabet.charAt(i % alphabet.length()) + "*";
+        }
+
+        part21 = "(" + part21 + ")*";
+
+        for (int i = 0; i < na - 1; ++i) {
+            part12 += alphabet.charAt(i % alphabet.length()) + "*";
+
+            if (part1.length() > 0) {
+                part1 += "|";
+            }
+
+            part1 += part11 + part12;
+        }
+
+        for (int i = 0; i < nb; ++i) {
+            part22 += alphabet.charAt(i % alphabet.length()) + "*";
+
+            if (part22.length() != 1) {
+                if (part2.length() > 0) {
+                    part2 += "|";
+                }
+
+                part2 += part22 + part21;
+            }
+        }
+
+        String pattern = "(" + part1 + ") - (a|aa|aaa|" + part2 + ")";
+
+        System.out.println(pattern);
+
+        System.out.println(pattern.length());
+
+        automaton.build(new StringStream(pattern));
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
     public static void main(String[] args) {
         //if (!isRegistered()) {
         //    checkRuns();
@@ -477,7 +553,9 @@ public class Main {
         int[] cases = new int[] { 50, 60, 70, 80 };
 
         for (int i = 0; i < cases.length; ++i) {
-            MertensTest(4 + cases[i], 3 + cases[i]);
+            //MertensTest(4 + cases[i], 3 + cases[i]);
+
+            ArbitraryTest1(4 + cases[i], 3 + cases[i]);
         }
 
         if (args.length < 2) {

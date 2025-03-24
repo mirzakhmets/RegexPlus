@@ -1,5 +1,6 @@
 package com.regexplus.automaton.dfa;
 
+import com.regexplus.Main;
 import com.regexplus.automaton.base.StateAnd;
 import com.regexplus.automaton.base.StateMinus;
 import com.regexplus.automaton.common.IEdge;
@@ -54,7 +55,7 @@ public class DeterministicAutomaton {
             //    break;
             //}
 
-            for (int i = 'a'; i <= /*DeterministicState.LETTER_MAX*/'a'; ++i) {
+            for (byte i : Main.alphabet.getBytes()) {
                 for (State s : this.nfaStates) {
                     s.tags.clear();
                 }
