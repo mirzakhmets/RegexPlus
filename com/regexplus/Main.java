@@ -399,6 +399,10 @@ public class Main {
             }
 
             part1 += part11 + part12;
+
+            //if (part12.length() >= 4) {
+            //    part12 = "";
+            //}
         }
 
         for (int i = 0; i < nb; ++i) {
@@ -411,9 +415,13 @@ public class Main {
 
                 part2 += part22 + part21;
             }
+
+            //if (part22.length() >= 3) {
+            //    part22 = "";
+            //}
         }
 
-        String pattern = "(" + part1 + ") - (a|aa|aaa|" + part2 + ")";
+        String pattern = "(" + part1 + ")-(a|aa|aaa|" + part2 + ")";
 
         System.out.println(pattern);
 
@@ -447,7 +455,7 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
-    public static final String alphabet = "abcd";
+    public static final String alphabet = "a";
 
     public static void ArbitraryTest1(int na, int nb) {
         long t = System.currentTimeMillis();
@@ -489,7 +497,7 @@ public class Main {
             }
         }
 
-        String pattern = "(" + part1 + ") - (a|aa|aaa|" + part2 + ")";
+        String pattern = "(" + part1 + ")-(a|aa|aaa|" + part2 + ")";
 
         System.out.println(pattern);
 
@@ -550,12 +558,12 @@ public class Main {
         //int[] cases = new int[] { 0, 10, 11, 12, 13, 20, 30};
         //int[] cases = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 20, 30, 40 };
         //int[] cases = new int[] { 0 };
-        int[] cases = new int[] { 50, 60, 70, 80 };
+        int[] cases = new int[] { 120 };
 
         for (int i = 0; i < cases.length; ++i) {
-            //MertensTest(4 + cases[i], 3 + cases[i]);
+            MertensTest(4 + cases[i], 3 + cases[i]);
 
-            ArbitraryTest1(4 + cases[i], 3 + cases[i]);
+            //ArbitraryTest1(4 + cases[i], 3 + cases[i]);
         }
 
         if (args.length < 2) {
