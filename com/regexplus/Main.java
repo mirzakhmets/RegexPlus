@@ -501,6 +501,65 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
+    public static void MertensTest3(int na) {
+        // Mertens' tests
+        long t = System.currentTimeMillis();
+        Automaton automaton = new Automaton();
+        String part2 = "";
+        int z = 1;
+
+        for (int i = 0; i < na; ++z) {
+            int b = Math.min(na - i, z);
+
+            String part1 = "";
+
+            for (int j = 0; j < b; ++j) {
+                part1 += "a";
+            }
+
+            i += b;
+
+            if (part2.length() > 0) {
+                part2 += "&";
+            }
+
+            part2 += "((" + part1 + ")*)";
+        }
+
+        String pattern = part2;
+
+        System.out.println(pattern);
+
+        System.out.println(pattern.length());
+
+        automaton.build(new StringStream(pattern));
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
     public static final String alphabet = "a";
 
     public static void ArbitraryTest1(int na, int nb) {
@@ -601,13 +660,13 @@ public class Main {
  }
  }
  */
-        //int[] cases = new int[] { 0, 10, 11, 12, 13, 20, 30};
-        //int[] cases = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 20, 30, 40 };
-        //int[] cases = new int[] { 0 };
-        int[] cases = new int[] { 4000 };
+        //int[] cases = new int[] { 1, 10, 11, 12, 13, 20, 30};
+        //int[] cases = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 20, 30, 40, 50, 60 };
+        int[] cases = new int[] { 13 };
+        //int[] cases = new int[] { 10, 100, 200, 300, 400, 500, 600, 700, 800 };
 
         for (int i = 0; i < cases.length; ++i) {
-            MertensTest2(cases[i]);
+            MertensTest3(cases[i]);
 
             //ArbitraryTest1(4 + cases[i], 3 + cases[i]);
         }
