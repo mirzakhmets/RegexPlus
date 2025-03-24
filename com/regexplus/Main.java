@@ -421,7 +421,53 @@ public class Main {
             //}
         }
 
-        String pattern = "(" + part1 + ")-(a|aa|aaa|" + part2 + ")";
+        String pattern = "(a|aa|aaa|" + part2 + ")-" + "(" + part1 + ")";
+
+        System.out.println(pattern);
+
+        System.out.println(pattern.length());
+
+        automaton.build(new StringStream(pattern));
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
+    public static void MertensTest2(int na) {
+        // Mertens' tests
+        long t = System.currentTimeMillis();
+        Automaton automaton = new Automaton();
+        String part1 = "";
+
+        for (int i = 0; i < na; ++i) {
+            part1 += "a";
+        }
+
+        part1 = "(" + part1 + ")*a|(" + part1 + ")*aa";
+
+        String pattern = "(" + part1 + ")-((aa)*)";
 
         System.out.println(pattern);
 
@@ -558,10 +604,10 @@ public class Main {
         //int[] cases = new int[] { 0, 10, 11, 12, 13, 20, 30};
         //int[] cases = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 20, 30, 40 };
         //int[] cases = new int[] { 0 };
-        int[] cases = new int[] { 120 };
+        int[] cases = new int[] { 4000 };
 
         for (int i = 0; i < cases.length; ++i) {
-            MertensTest(4 + cases[i], 3 + cases[i]);
+            MertensTest2(cases[i]);
 
             //ArbitraryTest1(4 + cases[i], 3 + cases[i]);
         }
