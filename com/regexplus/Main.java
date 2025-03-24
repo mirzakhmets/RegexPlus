@@ -22,11 +22,11 @@ public class Main {
         INode node = Parser.ParseFromString(text);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testOne-1.gv")));
+                    File("testOne-1.gv")));
             Case.writeNode(bw, node);
             bw.close();
             bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testOne-2.gv")));
+                    File("testOne-2.gv")));
             IState[] start = new IState[1];
             IState[] finish = new IState[1];
             ((Node) node).expand(start, finish);
@@ -372,10 +372,85 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-        if (!isRegistered()) {
-            checkRuns();
+    public static void MertensTest(int na, int nb) {
+        // Mertens' tests
+        long t = System.currentTimeMillis();
+        Automaton automaton = new Automaton();
+        String part1 = "", part11 = "", part12 = "";
+        String part2 = "", part21 = "", part22 = "";
+
+        for (int i = 0; i < na; ++i) {
+            part11 += "a";
         }
+
+        part11 = "(" + part11 + ")*";
+
+        for (int i = 0; i < nb; ++i) {
+            part21 += "a";
+        }
+
+        part21 = "(" + part21 + ")*";
+
+        for (int i = 0; i < na - 1; ++i) {
+            part12 += "a";
+
+            if (part1.length() > 0) {
+                part1 += "|";
+            }
+
+            part1 += part11 + part12;
+        }
+
+        for (int i = 0; i < nb; ++i) {
+            part22 += "a";
+
+            if (part22.length() != 1) {
+                if (part2.length() > 0) {
+                    part2 += "|";
+                }
+
+                part2 += part22 + part21;
+            }
+        }
+
+        String pattern = "(" + part1 + ") - (a|aa|aaa|" + part2 + ")";
+
+        System.out.println(pattern);
+
+        System.out.println(pattern.length());
+
+        automaton.build(new StringStream(pattern));
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
+    public static void main(String[] args) {
+        //if (!isRegistered()) {
+        //    checkRuns();
+        //}
 
 
  /*
@@ -396,6 +471,15 @@ public class Main {
  }
  }
  */
+        //int[] cases = new int[] { 0, 10, 11, 12, 13, 20, 30};
+        //int[] cases = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 20, 30, 40 };
+        //int[] cases = new int[] { 0 };
+        int[] cases = new int[] { 50, 60, 70, 80 };
+
+        for (int i = 0; i < cases.length; ++i) {
+            MertensTest(4 + cases[i], 3 + cases[i]);
+        }
+
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
             System.out.println("Syntax:");

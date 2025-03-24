@@ -50,7 +50,11 @@ public class DeterministicAutomaton {
         this.start.visitIndex = ++DeterministicState.VISIT_INDEX;
         while (!detStack.empty()) {
             DeterministicState state = detStack.pop();
-            for (int i = 0; i < DeterministicState.LETTER_MAX; ++i) {
+            //if (state.isFinal) {
+            //    break;
+            //}
+
+            for (int i = 'a'; i <= /*DeterministicState.LETTER_MAX*/'a'; ++i) {
                 for (State s : this.nfaStates) {
                     s.tags.clear();
                 }

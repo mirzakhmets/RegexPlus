@@ -13,6 +13,7 @@ public class StateAnd extends State {
     //boolean[] visited;
     public Map<Integer, boolean[]> visited = new HashMap<>();
     int /*counter, */counterVisitIndex;
+    boolean passedComputed = false, passed = false;
 
     public StateAnd() {
         super();
@@ -24,6 +25,10 @@ public class StateAnd extends State {
     }
 
     public boolean visit(int visitIndex, IEdge edge) {
+        //if (passedComputed) {
+        //    return passed;
+        //}
+
         if (this.counterVisitIndex != visitIndex) {
             this.counterVisitIndex = visitIndex;
             //this.counter = this.getInputEdges().size();
@@ -42,6 +47,10 @@ public class StateAnd extends State {
                     v = this.visited.get(t.index);
                 }
                 v[t.type] = true;
+
+                passedComputed = true;
+
+                passed = v[0] && v[1];
 
                 return v[0] && v[1];
             }

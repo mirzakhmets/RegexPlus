@@ -13,6 +13,7 @@ public class StateMinus extends State {
     //boolean[] visited;
     public Map<Integer, boolean[]> visited = new HashMap<>();
     int counterVisitIndex;
+    boolean passedComputed = false, passed = false;
 
     public StateMinus() {
         super();
@@ -24,6 +25,10 @@ public class StateMinus extends State {
     }
 
     public boolean visit(int visitIndex, IEdge edge) {
+        //if (passedComputed) {
+        //    return passed;
+        //}
+
         if (this.counterVisitIndex != visitIndex) {
             this.counterVisitIndex = visitIndex;
             //this.visited = new boolean[this.getInputEdges().size()];
@@ -44,6 +49,11 @@ public class StateMinus extends State {
                 }
                 v[t.type] = true;
                 //v[this.getInputEdges().size() - 1 - this.getInputEdges().indexOf(edge)] = true;
+
+                passedComputed = true;
+
+                passed = !v[0] && v[1];
+
                 return !v[0] && v[1];
             }
         }

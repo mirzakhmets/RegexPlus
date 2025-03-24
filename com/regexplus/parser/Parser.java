@@ -153,12 +153,12 @@ public class Parser {
                 INode right = this.ParseChoice();
                 if (right != null) {
                     //if (Main.DETERMINISTIC) {
-                    // return new NodeChoice(left, right);
+                     return new NodeChoice(left, right);
                     //}
-                    INode notLeft = new NodeNot(left);
-                    INode notRight = new NodeNot(right);
-                    INode and = new NodeAnd(notLeft, notRight);
-                    return new NodeNot(and);
+                    //INode notLeft = new NodeNot(left);
+                    //INode notRight = new NodeNot(right);
+                    //INode and = new NodeAnd(notLeft, notRight);
+                    //return new NodeNot(and);
                 }
             }
         }

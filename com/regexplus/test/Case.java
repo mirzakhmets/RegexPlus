@@ -132,7 +132,7 @@ public class Case {
             automaton.build(new StringStream(this.pattern));
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(new
-                        File("C:/Debug/pattern.gv")));
+                        File("pattern.gv")));
                 writeState(bw, automaton.getStart());
                 bw.close();
             } catch (IOException e) {
@@ -143,7 +143,7 @@ public class Case {
                     DeterministicAutomaton(automaton);
             try {
                 FileOutputStream fos = new
-                        FileOutputStream("C:/debug/dfa.gv");
+                        FileOutputStream("dfa.gv");
                 deterministicAutomaton.write(fos);
                 fos.close();
             } catch (Exception e) {

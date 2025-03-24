@@ -199,9 +199,9 @@ deterministicState.automaton.states.size();
     public void write(OutputStream stream) {
         try {
             if (this.isFinal) {
-                stream.write(("node_" + this.index + " [shape=doublecircle,label=\"" + this.index + ": " + this.label() + "\"];\n").getBytes());
+                stream.write(("node_" + this.index + " [shape=doublecircle,label=\"" + this.index /*+ ": " + this.label()*/ + "\"];\n").getBytes());
             } else {
-                stream.write(("node_" + this.index + " [shape=circle,label=\"" + this.index + ": " + this.label() + "\"];\n").getBytes());
+                stream.write(("node_" + this.index + " [shape=circle,label=\"" + this.index /*+ ": " + this.label()*/ + "\"];\n").getBytes());
             }
         } catch (Exception e) {
             e.printStackTrace();
