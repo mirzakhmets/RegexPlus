@@ -1,28 +1,6 @@
 digraph G {
-node_1 [shape=circle,label="1"];
-	node_1 -> node_2 [label="a"];
-node_7 [shape=circle,label="7"];
-	node_7 -> node_8 [label="a"];
-node_5 [shape=circle,label="5"];
-	node_5 -> node_6 [label="a"];
-node_10 [shape=circle,label="10"];
-	node_10 -> node_11 [label="a"];
-node_3 [shape=circle,label="3"];
-	node_3 -> node_4 [label="a"];
-node_4 [shape=circle,label="4"];
-	node_4 -> node_5 [label="a"];
-node_6 [shape=circle,label="6"];
-	node_6 -> node_7 [label="a"];
-node_8 [shape=circle,label="8"];
-	node_8 -> node_9 [label="a"];
-node_11 [shape=circle,label="11"];
-	node_11 -> node_12 [label="a"];
-node_2 [shape=circle,label="2"];
-	node_2 -> node_3 [label="a"];
+node_1 [shape=doublecircle,label="1"];
+	node_1 -> node_1 [label="a"];
 node_0 [shape=doublecircle,label="0"];
 	node_0 -> node_1 [label="a"];
-node_9 [shape=circle,label="9"];
-	node_9 -> node_10 [label="a"];
-node_12 [shape=doublecircle,label="12"];
-	node_12 -> node_1 [label="a"];
 }
