@@ -610,7 +610,7 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
-    public static final String alphabet = "ab";
+    public static final String alphabet = "ba";
 
     public static void ArbitraryTest1(int na, int nb) {
         long t = System.currentTimeMillis();
@@ -857,7 +857,7 @@ public class Main {
 
         //SATTestOne();
         //SATTestTwo("case1.cnf");
-        SATTestTwo("sudoku.cnf");
+        SATTestTwo("small.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
