@@ -610,7 +610,7 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
-    public static final String alphabet = "a";
+    public static final String alphabet = "ab";
 
     public static void ArbitraryTest1(int na, int nb) {
         long t = System.currentTimeMillis();
@@ -686,6 +686,140 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
+    public static void SATTestOne() {
+        long t = System.currentTimeMillis();
+        Automaton automaton = new Automaton();
+
+        // Source: https://www.mqasem.net/sat/sat/index.php
+        //
+        //automaton.build(new StringStream("(.a.a)&((...a)|(a...))&(.a..)&(.aa.)&((a...)|(..a.))"));
+        automaton.build(new StringStream(
+                "((a|b)a(a|b)a)&(((a|b)(a|b)(a|b)a)|(a(a|b)(a|b)(a|b)))&((a|b)a(a|b)(a|b))&((a|b)aa(a|b))&((a(a|b)(a|b)(a|b))|((a|b)(a|b)a(a|b)))"
+                    + "&(aa(a|b)a)&(((a|b)(a|b)(a|b)a)|(a(a|b)(a|b)(a|b)))&((a|b)a(a|b)a)&((a|b)aa(a|b))&((a(a|b)(a|b)(a|b))|((a|b)(a|b)a(a|b)))"
+                    + "&((a|b)a(a|b)a)&(((a|b)(a|b)(a|b)a)|(a(a|b)(a|b)a))&((a|b)a(a|b)a)&((a|b)aa(a|b))&((a(a|b)(a|b)(a|b))|((a|b)(a|b)a(a|b)))"
+                    + "&((a|b)a(a|b)a)&(((a|b)(a|b)aa)|(a(a|b)(a|b)(a|b)))&((a|b)a(a|b)(a|b))&((a|b)aa(a|b))&((a(a|b)(a|b)(a|b))|((a|b)(a|b)a(a|b)))"
+        ));
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
+    public static void SATTestTwo(String fileName) {
+        long t = System.currentTimeMillis();
+        Automaton automaton = new Automaton();
+        String pattern = "";
+
+        try {
+            BufferedReader rd = new BufferedReader(new FileReader(fileName));
+
+            String[] snm = rd.readLine().split(" ");
+
+            int n = Integer.parseInt(snm[2]), m = Integer.parseInt(snm[3]);
+
+            boolean [][] tblT = new boolean[n][m];
+            boolean [][] tblF = new boolean[n][m];
+
+            for (int i = 0; i < tblT.length; ++i) {
+                for (int j = 0; j < tblT[i].length; ++j) {
+                    tblT[i][j] = false;
+
+                    tblF[i][j] = false;
+                }
+            }
+
+            for (int i = 0; i < m; ++i) {
+                String s = rd.readLine();
+
+                String[] p = s.split(" ");
+
+                for (int j = 0; (j + 1) < p.length; ++j) {
+                    int k = Integer.parseInt(p[j]);
+
+                    if (k < 0) {
+                        tblF[-k - 1][i] = true;
+                    } else {
+                        tblT[k - 1][i] = true;
+                    }
+                }
+            }
+
+            for (int i = 0; i < n; ++i) {
+                String st = "", sf = "";
+
+                for (int j = 0; j < m; ++j) {
+                    if (tblT[i][j]) {
+                        st += "a";
+                    } else {
+                        st += "(a|b)";
+                    }
+
+                    if (tblF[i][j]) {
+                        sf += "a";
+                    } else {
+                        sf += "(a|b)";
+                    }
+                }
+
+                if (pattern.length() > 0) {
+                    pattern += "&";
+                }
+
+                pattern += "((" + st + ")|(" + sf + "))";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        automaton.build(new StringStream(pattern));
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
     public static void main(String[] args) {
         //if (!isRegistered()) {
         //    checkRuns();
@@ -712,14 +846,18 @@ public class Main {
  */
         //int[] cases = new int[] { 1, 10, 11, 12, 13, 20, 30};
         //int[] cases = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 20, 30, 40, 50, 60 };
-        int[] cases = new int[] { 1000 };
+        //int[] cases = new int[] { 1000 };
         //int[] cases = new int[] { 10, 100, 200, 300, 400, 500, 600, 700, 800 };
 
-        for (int i = 0; i < cases.length; ++i) {
-            WouterGeladeTest(cases[i]);
+        //for (int i = 0; i < cases.length; ++i) {
+        //    WouterGeladeTest(cases[i]);
 
-            //ArbitraryTest1(4 + cases[i], 3 + cases[i]);
-        }
+        //    ArbitraryTest1(4 + cases[i], 3 + cases[i]);
+        //}
+
+        //SATTestOne();
+        //SATTestTwo("case1.cnf");
+        SATTestTwo("sudoku.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
