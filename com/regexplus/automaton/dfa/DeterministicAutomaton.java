@@ -60,9 +60,9 @@ public class DeterministicAutomaton {
                     s.tags.clear();
                 }
                 for (State s : this.nfaStates) {
-                    if (s.getType() == StateType.AND) {
-                        ((StateAnd) s).visited.clear();
-                    }
+                    //if (s.getType() == StateType.AND) {
+                    //    ((StateAnd) s).visited.clear();
+                    //}
                     if (s.getType() == StateType.MINUS) {
                         ((StateMinus) s).visited.clear();
                     }

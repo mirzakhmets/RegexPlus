@@ -1,5 +1,7 @@
 package com.regexplus;
 
+import com.regexplus.automaton.base.EdgeEmpty;
+import com.regexplus.automaton.base.StateAnd;
 import com.regexplus.automaton.common.IState;
 import com.regexplus.automaton.dfa.DeterministicAutomaton;
 import com.regexplus.automaton.model.Automaton;
@@ -610,7 +612,7 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
-    public static final String alphabet = "ba";
+    public static final String alphabet = "ab";
 
     public static void ArbitraryTest1(int na, int nb) {
         long t = System.currentTimeMillis();
@@ -729,7 +731,7 @@ public class Main {
     public static void SATTestTwo(String fileName) {
         long t = System.currentTimeMillis();
         Automaton automaton = new Automaton();
-        String pattern = "";
+        StateAnd andState = null;
 
         try {
             BufferedReader rd = new BufferedReader(new FileReader(fileName));
@@ -737,6 +739,10 @@ public class Main {
             String[] snm = rd.readLine().split(" ");
 
             int n = Integer.parseInt(snm[2]), m = Integer.parseInt(snm[3]);
+
+            andState = new StateAnd(n);
+
+            new EdgeEmpty(andState, automaton.getFinish());
 
             boolean [][] tblT = new boolean[n][m];
             boolean [][] tblF = new boolean[n][m];
@@ -782,17 +788,19 @@ public class Main {
                     }
                 }
 
-                if (pattern.length() > 0) {
-                    pattern += "&";
-                }
+                String pattern = "((" + st + ")|(" + sf + "))";
 
-                pattern += "((" + st + ")|(" + sf + "))";
+                Automaton a = new Automaton();
+
+                a.build(new StringStream(pattern));
+
+                new EdgeEmpty(automaton.getStart(), a.getStart());
+
+                new EdgeEmpty(a.getFinish(), andState);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        automaton.build(new StringStream(pattern));
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
@@ -857,7 +865,7 @@ public class Main {
 
         //SATTestOne();
         //SATTestTwo("case1.cnf");
-        SATTestTwo("small.cnf");
+        SATTestTwo("case1.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

@@ -14,10 +14,19 @@ public class StateAnd extends State {
     public Map<Integer, boolean[]> visited = new HashMap<>();
     int /*counter, */counterVisitIndex;
     boolean passedComputed = false, passed = false;
+    int visitedCounter = 0, currentVisitedCounter = 0;
 
     public StateAnd() {
         super();
         this.counterVisitIndex = -1;
+    }
+
+    public StateAnd(int visitedCounter) {
+        super();
+
+        this.counterVisitIndex = -1;
+
+        this.visitedCounter = visitedCounter;
     }
 
     public StateType getType() {
@@ -35,7 +44,9 @@ public class StateAnd extends State {
             this.visited.clear();
             //this.visited = new boolean[this.getInputEdges().size()];
             //Arrays.fill(visited, false);
+            this.currentVisitedCounter = this.visitedCounter;
         }
+
         for (Tag t : ((State) edge.getStart()).tags.values()) {
             if (t.finalState == this) {
                 boolean[] v = null;
@@ -55,6 +66,9 @@ public class StateAnd extends State {
                 return v[0] && v[1];
             }
         }
+
+        --this.currentVisitedCounter;
+
         //if (!visited[this.getInputEdges().indexOf(edge)]
 /* &&
  (
@@ -69,6 +83,6 @@ this.matches().get(0).start()
         //}
         //visited[this.getInputEdges().indexOf(edge)] = true;
         //return this.counter == 0;
-        return false;
+        return this.currentVisitedCounter == 0;
     }
 }
