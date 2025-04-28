@@ -768,6 +768,8 @@ public class Main {
                 }
             }
 
+            String vcs = "", s1 = "";
+
             for (int i = 0; i < m; ++i) {
                 String s = rd.readLine();
 
@@ -778,6 +780,8 @@ public class Main {
                 for (int j = 0; (j + 1) < p.length; ++j) {
                     int k = Integer.parseInt(p[j]);
 
+                    String ps = "";
+
                     if (!ss.isEmpty()) {
                         ss = ss + "|";
                     }
@@ -785,14 +789,31 @@ public class Main {
                     if (k < 0) {
                         tblF[-k - 1][i] = true;
 
-                        ss = ss + "(" + pad(-k - 1) + ("b" + pad(n + k)) + ")";
+                        ps = "(" + pad(-k - 1) + ("b" + pad(n + k)) + ")";
                     } else {
                         tblT[k - 1][i] = true;
 
-                        ss = ss + "(" + pad(k - 1) + ("a" + pad(n - k)) + ")";
+                        ps = "(" + pad(k - 1) + ("a" + pad(n - k)) + ")";
                     }
+
+                    ss += ps;
                 }
 
+                ss = "(" + ss + ")";
+
+                if (i == 0) {
+                    pattern = ss;
+
+                    s1 = ss;
+                } else {
+                    if (!vcs.isEmpty()) {
+                        vcs += "|";
+                    }
+
+                    vcs += "((" + s1 + ")-(" + ss + "))";
+                }
+
+                /*
                 ss = "(" + ss + ")";
 
                 if (!pattern.isEmpty()) {
@@ -800,8 +821,13 @@ public class Main {
                 }
 
                 pattern += ss;
+                */
 
                 System.out.println("");
+            }
+
+            if (vcs.length() > 0) {
+                pattern = pattern + "-" + vcs;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -878,7 +904,7 @@ public class Main {
 
         //SATTestOne();
         //SATTestTwo("case1.cnf");
-        SATTestTwo("case2.cnf");
+        SATTestTwo("case1.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
