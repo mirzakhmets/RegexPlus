@@ -5,6 +5,7 @@ import com.regexplus.parser.node.common.INode;
 import com.regexplus.parser.node.common.NodeRepeatType;
 
 import java.io.ByteArrayInputStream;
+import java.util.Stack;
 
 /*
 R =
@@ -16,6 +17,7 @@ R =
 */
 public class Parser {
     IParserStream ips;
+    int logicalChoiceIndex = 0;
 
     public Parser(IParserStream ips) {
         this.ips = ips;
@@ -49,7 +51,7 @@ public class Parser {
     }
 
     public boolean IsMeta() {
-        return ")*+?|&-.~[]".indexOf(this.getCurrent()) >= 0;
+        return ")*+?|&-.~[]#".indexOf(this.getCurrent()) >= 0;
     }
 
     protected INode ParseNode() {
@@ -153,7 +155,9 @@ public class Parser {
                 INode right = this.ParseChoice();
                 if (right != null) {
                     //if (Main.DETERMINISTIC) {
-                        return new NodeChoice(left, right);
+                        NodeChoice choice = new NodeChoice(left, right);
+
+                        return choice;
                     //}
                     //INode notLeft = new NodeNot(left);
                     //INode notRight = new NodeNot(right);
@@ -166,13 +170,31 @@ public class Parser {
     }
 
     protected INode ParseAnd() {
-        INode left = this.ParseChoice();
+        INode left = this.ParseLogicalChoice();
         if (left != null) {
             if (!IsMeta() || getCurrent() == '&') {
                 this.getNext();
                 INode right = this.ParseAnd();
                 if (right != null) {
                     return new NodeAnd(left, right);
+                }
+            }
+        }
+        return left;
+    }
+
+    protected INode ParseLogicalChoice() {
+        INode left = this.ParseChoice();
+        if (left != null) {
+            if (!IsMeta() || getCurrent() == '#') {
+                this.getNext();
+                INode right = this.ParseLogicalChoice();
+                if (right != null) {
+                    NodeChoice choice = new NodeChoice(left, right);
+
+                    choice.logicalChoiceIndex = ++this.logicalChoiceIndex;
+
+                    return choice;
                 }
             }
         }

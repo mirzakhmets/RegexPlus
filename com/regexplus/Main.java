@@ -728,10 +728,21 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
+    public static String pad(int n) {
+        String result = "";
+
+        for (int i = 0; i < n; ++i) {
+            result = result + "(a|b)";
+        }
+
+        return result;
+    }
+
     public static void SATTestTwo(String fileName) {
         long t = System.currentTimeMillis();
-        Automaton automaton = new Automaton();
-        StateAnd andState = null;
+        //Automaton automaton = new Automaton();
+        //StateAnd andState = null;
+        String pattern = "";
 
         try {
             BufferedReader rd = new BufferedReader(new FileReader(fileName));
@@ -740,12 +751,14 @@ public class Main {
 
             int n = Integer.parseInt(snm[2]), m = Integer.parseInt(snm[3]);
 
-            andState = new StateAnd(n);
+            //andState = new StateAnd(n);
 
-            new EdgeEmpty(andState, automaton.getFinish());
+            //new EdgeEmpty(andState, automaton.getFinish());
 
             boolean [][] tblT = new boolean[n][m];
             boolean [][] tblF = new boolean[n][m];
+
+            System.out.println(n);
 
             for (int i = 0; i < tblT.length; ++i) {
                 for (int j = 0; j < tblT[i].length; ++j) {
@@ -760,47 +773,47 @@ public class Main {
 
                 String[] p = s.split(" ");
 
+                String ss = "";
+
                 for (int j = 0; (j + 1) < p.length; ++j) {
                     int k = Integer.parseInt(p[j]);
 
+                    if (!ss.isEmpty()) {
+                        ss = ss + "|";
+                    }
+
                     if (k < 0) {
                         tblF[-k - 1][i] = true;
+
+                        ss = ss + "(" + pad(-k - 1) + ("b" + pad(n + k)) + ")";
                     } else {
                         tblT[k - 1][i] = true;
-                    }
-                }
-            }
 
-            for (int i = 0; i < n; ++i) {
-                String st = "", sf = "";
-
-                for (int j = 0; j < m; ++j) {
-                    if (tblT[i][j]) {
-                        st += "a";
-                    } else {
-                        st += "(a|b)";
-                    }
-
-                    if (tblF[i][j]) {
-                        sf += "a";
-                    } else {
-                        sf += "(a|b)";
+                        ss = ss + "(" + pad(k - 1) + ("a" + pad(n - k)) + ")";
                     }
                 }
 
-                String pattern = "((" + st + ")|(" + sf + "))";
+                ss = "(" + ss + ")";
 
-                Automaton a = new Automaton();
+                if (!pattern.isEmpty()) {
+                    pattern += "&";
+                }
 
-                a.build(new StringStream(pattern));
+                pattern += ss;
 
-                new EdgeEmpty(automaton.getStart(), a.getStart());
-
-                new EdgeEmpty(a.getFinish(), andState);
+                System.out.println("");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //pattern = "(" + pattern + ")&(" + mask + ")";
+
+        System.out.println(pattern);
+
+        Automaton automaton = new Automaton();
+
+        automaton.build(new StringStream(pattern));
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
@@ -865,7 +878,7 @@ public class Main {
 
         //SATTestOne();
         //SATTestTwo("case1.cnf");
-        SATTestTwo("case1.cnf");
+        SATTestTwo("case2.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

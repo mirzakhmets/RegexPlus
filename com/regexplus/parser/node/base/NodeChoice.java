@@ -2,12 +2,15 @@ package com.regexplus.parser.node.base;
 
 import com.regexplus.automaton.base.EdgeEmpty;
 import com.regexplus.automaton.common.IState;
+import com.regexplus.automaton.model.State;
 import com.regexplus.parser.node.common.INode;
 import com.regexplus.parser.node.common.NodeType;
 import com.regexplus.parser.node.model.Node;
 import com.regexplus.parser.node.model.NodePaired;
 
 public class NodeChoice extends NodePaired {
+    public int logicalChoiceIndex = -1;
+
     public NodeChoice(INode left, INode right) {
         super(left, right);
     }
@@ -25,10 +28,16 @@ public class NodeChoice extends NodePaired {
         IState[] c = this.newEmptyState();
         IState[] d = this.newEmptyState();
         new EdgeEmpty(start[0], a[0]);
+
+        ((State) a[0]).logicalChoiceIndex = this.logicalChoiceIndex;
+
         ((Node) this.left).expand(a, b);
         new EdgeEmpty(b[0], finish[0]);
         new EdgeEmpty(start[0], c[0]);
         ((Node) this.right).expand(c, d);
+
+        ((State) c[0]).logicalChoiceIndex = this.logicalChoiceIndex;
+
         new EdgeEmpty(d[0], finish[0]);
     }
 }
