@@ -14,9 +14,7 @@ import com.regexplus.test.Case;
 import com.regexplus.test.CaseResult;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 public class Main {
     public static boolean DETERMINISTIC = true;
@@ -734,7 +732,7 @@ public class Main {
         String result = "";
 
         for (int i = 0; i < n; ++i) {
-            result = result + "."; //"(a|b)";
+            result = result + "."; // "(a|b)"
         }
 
         return result;
@@ -789,11 +787,11 @@ public class Main {
                     if (k < 0) {
                         tblF[-k - 1][i] = true;
 
-                        ps = "(" + pad(-k - 1) + "b" + (n + k > 0 ? pad(1) + "*" : "") + ")";
+                        ps = "(" + pad(-k - 1) + "b" + pad(n + k) + ")";
                     } else {
                         tblT[k - 1][i] = true;
 
-                        ps = "(" + pad(k - 1) + "a" + (n - k > 0 ? pad(1) + "*" : "") + ")";
+                        ps = "(" + pad(k - 1) + "a" + pad (n - k) + ")";
                     }
 
                     ss += ps;
@@ -821,6 +819,8 @@ public class Main {
                 }
 
                 pattern += ss;
+
+                System.out.println(ss);
             }
 
             if (vcs.length() > 0) {
@@ -837,7 +837,7 @@ public class Main {
 
         //pattern = "(" + pattern + ")&(" + mask + ")";
 
-        System.out.println(pattern);
+        //System.out.println(pattern);
 
         Automaton automaton = new Automaton();
 
@@ -968,7 +968,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        pattern = GenerateLinearExpression(v); //GenerateExpression(v, 0, v.size() - 1); // GenerateLinearExpression(v);
+        pattern = GenerateLinearExpression(v); // GenerateExpression(v, 0, v.size() - 1);
 
         //pattern = "~(" + pattern + ")";
 
@@ -979,6 +979,179 @@ public class Main {
         Automaton automaton = new Automaton();
 
         automaton.build(new StringStream(pattern));
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
+    public static void SATTestFour(String fileName) {
+        long t = System.currentTimeMillis();
+        //Automaton automaton = new Automaton();
+        //StateAnd andState = null;
+        String pattern = "";
+        ArrayList<String> v = new ArrayList<>();
+
+        try {
+            BufferedReader rd = new BufferedReader(new FileReader(fileName));
+
+            String[] snm = rd.readLine().split(" ");
+
+            int n = Integer.parseInt(snm[2]), m = Integer.parseInt(snm[3]);
+
+            //andState = new StateAnd(n);
+
+            //new EdgeEmpty(andState, automaton.getFinish());
+
+            boolean [][] tblT = new boolean[n][m];
+            boolean [][] tblF = new boolean[n][m];
+
+            for (int i = 0; i < tblT.length; ++i) {
+                for (int j = 0; j < tblT[i].length; ++j) {
+                    tblT[i][j] = false;
+
+                    tblF[i][j] = false;
+                }
+            }
+
+            for (int i = 0; i < m; ++i) {
+                String s = rd.readLine();
+
+                String[] p = s.split(" ");
+
+                String ss = "";
+
+                ArrayList<Integer> numbers = new ArrayList<>();
+
+                for (int j = 0; (j + 1) < p.length; ++j) {
+                    int k = Integer.parseInt(p[j]);
+
+                    numbers.add(k);
+                }
+
+                Collections.sort(numbers, new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2) {
+                        if (Math.abs(o1) == Math.abs(o2)) {
+                            System.out.println("Equal");
+                        }
+
+                        return Math.abs(o1) - Math.abs(o2);
+                    }
+                });
+
+                int mink = Math.abs(numbers.getFirst());
+
+                int maxk = Math.abs(numbers.getLast());
+
+                for (int j = 0; j < numbers.size(); ++j) {
+                    String ps = "";
+
+                    int k = 0;
+
+                    for (int z = mink; z <= maxk; ++z) {
+                        if (k <= j) {
+                            if (z == Math.abs(numbers.get(k))) {
+                                if (k == j) {
+                                    if (numbers.get(k) < 0) {
+                                        ps += "b";
+                                    } else {
+                                        ps += "a";
+                                    }
+                                } else {
+                                    if (numbers.get(k) < 0) {
+                                        ps += "a";
+                                    } else {
+                                        ps += "b";
+                                    }
+                                }
+
+                                ++k;
+                            } else {
+                                ps += pad(1);
+                            }
+                        } else {
+                            ps += pad (1);
+                        }
+                    }
+
+                    ps = "(" + ps + ")";
+
+                    if (!ss.isEmpty()) {
+                        ss += "|";
+                    }
+
+                    ss += ps;
+
+                    //System.out.println(ps);
+                }
+
+                //System.out.println("");
+
+                ss = pad (mink - 1) + "(" + ss + ")" + pad(n - maxk);
+
+                //System.out.println(ss);
+
+                /*
+                if (i == 0) {
+                    pattern = ss;
+
+                    s1 = ss;
+                } else {
+                    if (!vcs.isEmpty()) {
+                        vcs += "|";
+                    }
+
+                    vcs += "((" + s1 + ")-(" + ss + "))";
+                }*/
+
+                if (!pattern.isEmpty()) {
+                    pattern += "&";
+
+                    //ss = "(~" + ss + ")";
+                }
+
+                pattern += ss;
+
+                v.add(ss);
+
+                //System.out.println(ss);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        //pattern = "~(" + pattern + ")";
+
+        //pattern = "(" + pattern + ")&(" + mask + ")";
+
+        //System.out.println(pattern);
+
+        Automaton automaton = new Automaton();
+
+        automaton.build(new StringStream(/*pattern*/GenerateExpression(v, 0, v.size() - 1)));
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
@@ -1042,8 +1215,8 @@ public class Main {
         //}
 
         //SATTestOne();
-        //SATTestTwo("case1.cnf");
-        SATTestThree("timetable5.cnf");
+        SATTestFour("50.cnf");
+        //SATTestThree("small.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

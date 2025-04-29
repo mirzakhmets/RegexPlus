@@ -28,6 +28,7 @@ public class NodeAnd extends NodePaired {
         IState[] c = this.newEmptyState();
         IState[] d = this.newEmptyState();
         IState[] e = new IState[]{new StateAnd()};
+        //IState[] f = this.newEmptyState();
         IState[] f = this.newTagState();
         ((StateTag) f[0]).pairedState = (State) e[0];
         new EdgeEmpty(start[0], f[0]);

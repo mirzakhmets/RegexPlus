@@ -72,13 +72,17 @@ public class DeterministicAutomaton {
                 }
                 DeterministicState s = state.step((char) i);
 
+
                 if (s != null && s.isFinal) {
-                    detStack.clear();
+                    //detStack.clear();
 
                     System.out.println("SATSIFIABLE");
 
-                    break;
+                    //break;
+
+                    System.exit(0);
                 }
+
 
                 state.transitions[i] = s;
                 if (s != null && s.visitIndex !=

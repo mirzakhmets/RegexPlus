@@ -35,7 +35,7 @@ public class DeterministicState {
         this.automaton = automaton;
     }
 
-    public void closure() {
+    public boolean closure() {
         for (State s : this.automaton.nfaStates) {
             s.tags.clear();
         }
@@ -49,6 +49,9 @@ public class DeterministicState {
             stack.push(s);
             s.setVisitIndex(NFA_VISIT_INDEX);
         }
+
+        Set<StateAnd> andStates = new HashSet<>();
+
         while (!stack.empty()) {
             State state = stack.pop();
             if (!this.states.contains(state)) {
@@ -94,6 +97,18 @@ public class DeterministicState {
                     if (outState.getType() == StateType.AND) {
                         StateAnd outStateAnd = (StateAnd) outState;
                         prePass = outStateAnd.visit(NFA_VISIT_INDEX, edge);
+
+                        if (!andStates.contains(outStateAnd)) {
+                            andStates.add(outStateAnd);
+                        } else {
+                            if (!prePass) {
+                                //System.out.println("UNSATSIFIABLE");
+
+                                //System.exit(0);
+
+                                return false;
+                            }
+                        }
                     }
                     if (outState.getType() == StateType.MINUS) {
                         StateMinus outStateMinus = (StateMinus) outState;
@@ -110,6 +125,15 @@ public class DeterministicState {
                 }
             }
         }
+
+        /*
+        for (StateAnd sa : andStates) {
+            if (!(sa.visitedAll[0] && sa.visitedAll[1])) {
+                return false;
+            }
+        }*/
+
+        return true;
     }
 
     public DeterministicState step(char symbol) {
@@ -144,7 +168,12 @@ public class DeterministicState {
         //deterministicState.states.addAll(result);
         //deterministicState.orderedStates = result;
         //deterministicState.tags.addAll(pairs);
-        deterministicState.closure();
+        if (!deterministicState.closure()) {
+            System.out.println("UNSATISFIABLE");
+
+            System.exit(0);
+            //return null;
+        }
  /*
  if (!deterministicState.automaton.states.contains(deterministicState)) {
  deterministicState.index =
