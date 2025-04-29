@@ -71,6 +71,15 @@ public class DeterministicAutomaton {
                     tag.state.tags.putAll(tag.tags);
                 }
                 DeterministicState s = state.step((char) i);
+
+                if (s != null && s.isFinal) {
+                    detStack.clear();
+
+                    System.out.println("SATSIFIABLE");
+
+                    break;
+                }
+
                 state.transitions[i] = s;
                 if (s != null && s.visitIndex !=
                         DeterministicState.VISIT_INDEX) {

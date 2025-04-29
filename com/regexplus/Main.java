@@ -14,7 +14,9 @@ import com.regexplus.test.Case;
 import com.regexplus.test.CaseResult;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class Main {
     public static boolean DETERMINISTIC = true;
@@ -732,7 +734,7 @@ public class Main {
         String result = "";
 
         for (int i = 0; i < n; ++i) {
-            result = result + "(a|b)";
+            result = result + "."; //"(a|b)";
         }
 
         return result;
@@ -757,8 +759,6 @@ public class Main {
 
             boolean [][] tblT = new boolean[n][m];
             boolean [][] tblF = new boolean[n][m];
-
-            System.out.println(n);
 
             for (int i = 0; i < tblT.length; ++i) {
                 for (int j = 0; j < tblT[i].length; ++j) {
@@ -789,18 +789,19 @@ public class Main {
                     if (k < 0) {
                         tblF[-k - 1][i] = true;
 
-                        ps = "(" + pad(-k - 1) + ("b" + pad(n + k)) + ")";
+                        ps = "(" + pad(-k - 1) + "b" + (n + k > 0 ? pad(1) + "*" : "") + ")";
                     } else {
                         tblT[k - 1][i] = true;
 
-                        ps = "(" + pad(k - 1) + ("a" + pad(n - k)) + ")";
+                        ps = "(" + pad(k - 1) + "a" + (n - k > 0 ? pad(1) + "*" : "") + ")";
                     }
 
                     ss += ps;
                 }
 
-                ss = "(" + ss + ")";
+                //ss = "(" + ss + ")";
 
+                /*
                 if (i == 0) {
                     pattern = ss;
 
@@ -811,27 +812,165 @@ public class Main {
                     }
 
                     vcs += "((" + s1 + ")-(" + ss + "))";
-                }
-
-                /*
-                ss = "(" + ss + ")";
+                }*/
 
                 if (!pattern.isEmpty()) {
                     pattern += "&";
+
+                    //ss = "(~" + ss + ")";
                 }
 
                 pattern += ss;
-                */
-
-                System.out.println("");
             }
 
             if (vcs.length() > 0) {
                 pattern = pattern + "-" + vcs;
             }
+
+            //pattern += "&(" + pad(n) + ")";
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+        //pattern = "~(" + pattern + ")";
+
+        //pattern = "(" + pattern + ")&(" + mask + ")";
+
+        System.out.println(pattern);
+
+        Automaton automaton = new Automaton();
+
+        automaton.build(new StringStream(pattern));
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
+    public static String GenerateLinearExpression (ArrayList<String> v) {
+        String result = "";
+
+        for (String s: v) {
+            if (!result.isEmpty()) {
+                result += "&";
+            }
+
+            result += s;
+        }
+
+        return result;
+    }
+
+    public static String GenerateExpression (ArrayList<String> v, int l, int r) {
+        String result = "";
+
+        if (l == r) {
+            return v.get(l);
+        }
+
+        int k = (l + r) / 2;
+
+        return "(" + GenerateExpression(v, l, k) + "&" + GenerateExpression(v, k + 1, r) + ")";
+    }
+
+    public static void SATTestThree(String fileName) {
+        long t = System.currentTimeMillis();
+        //Automaton automaton = new Automaton();
+        //StateAnd andState = null;
+        String pattern = "";
+        ArrayList<String> v = new ArrayList<>();
+
+        try {
+            BufferedReader rd = new BufferedReader(new FileReader(fileName));
+
+            String[] snm = rd.readLine().split(" ");
+
+            int n = Integer.parseInt(snm[2]), m = Integer.parseInt(snm[3]);
+
+            //andState = new StateAnd(n);
+
+            //new EdgeEmpty(andState, automaton.getFinish());
+
+            boolean [][] tblT = new boolean[n][m];
+            boolean [][] tblF = new boolean[n][m];
+
+            for (int i = 0; i < tblT.length; ++i) {
+                for (int j = 0; j < tblT[i].length; ++j) {
+                    tblT[i][j] = false;
+
+                    tblF[i][j] = false;
+                }
+            }
+
+            String vcs = "", s1 = "";
+
+            for (int i = 0; i < m; ++i) {
+                String s = rd.readLine();
+
+                String[] p = s.split(" ");
+
+                String ss = "";
+
+                for (int j = 0; (j + 1) < p.length; ++j) {
+                    int k = Integer.parseInt(p[j]);
+
+                    String ps = "";
+
+                    if (!ss.isEmpty()) {
+                        ss = ss + "|";
+                    }
+
+                    if (k < 0) {
+                        tblF[-k - 1][i] = true;
+
+                        ps = "(" + pad(-k - 1) + "b" + pad (n + k) + ")";
+                    } else {
+                        tblT[k - 1][i] = true;
+
+                        ps = "(" + pad(k - 1) + "a" + pad(n - k) + ")";
+                    }
+
+                    ss += ps;
+                }
+
+                //pattern += ss;
+                v.add("(" + ss + ")");
+            }
+
+            if (vcs.length() > 0) {
+                pattern = pattern + "-" + vcs;
+            }
+
+            //pattern += "&(" + pad(n) + ")";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        pattern = GenerateLinearExpression(v); //GenerateExpression(v, 0, v.size() - 1); // GenerateLinearExpression(v);
+
+        //pattern = "~(" + pattern + ")";
 
         //pattern = "(" + pattern + ")&(" + mask + ")";
 
@@ -904,7 +1043,7 @@ public class Main {
 
         //SATTestOne();
         //SATTestTwo("case1.cnf");
-        SATTestTwo("case1.cnf");
+        SATTestThree("timetable5.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

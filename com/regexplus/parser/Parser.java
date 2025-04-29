@@ -51,7 +51,7 @@ public class Parser {
     }
 
     public boolean IsMeta() {
-        return ")*+?|&-.~[]#".indexOf(this.getCurrent()) >= 0;
+        return ")*+?|&-~[]#".indexOf(this.getCurrent()) >= 0;
     }
 
     protected INode ParseNode() {
@@ -176,6 +176,9 @@ public class Parser {
                 this.getNext();
                 INode right = this.ParseAnd();
                 if (right != null) {
+                    //return new NodeMinus(left, new NodeNot(right));
+                    //return new NodeNot(new NodeChoice(new NodeNot(left), new NodeNot(right)));
+
                     return new NodeAnd(left, right);
                 }
             }
