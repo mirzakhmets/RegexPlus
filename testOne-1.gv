@@ -1,0 +1,3 @@
+digraph G {
+	node_1[label="a"]
+}

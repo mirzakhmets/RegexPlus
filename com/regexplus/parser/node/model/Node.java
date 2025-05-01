@@ -14,6 +14,7 @@ public class Node implements INode {
     IState[] expandedStates = new IState[2];
 
     public Node() {
+        expandedStates[0] = expandedStates[1] = null;
     }
 
     public NodeType getType() {
@@ -57,9 +58,13 @@ public class Node implements INode {
             return false;
         }
 
-        expandedStates[0] = new StateEmpty();
+        if (expandedStates[0] == null) {
+            expandedStates[0] = new StateEmpty();
+        }
 
-        expandedStates[1] = new StateEmpty();
+        if (expandedStates[1] == null) {
+            expandedStates[1] = new StateEmpty();
+        }
 
         if (start[0] == null) {
             start[0] = expandedStates[0];

@@ -7,7 +7,9 @@ import com.regexplus.automaton.dfa.DeterministicAutomaton;
 import com.regexplus.automaton.model.Automaton;
 import com.regexplus.automaton.model.StringStream;
 import com.regexplus.match.common.IMatch;
+import com.regexplus.parser.IParserStream;
 import com.regexplus.parser.Parser;
+import com.regexplus.parser.ParserInputStream;
 import com.regexplus.parser.node.common.INode;
 import com.regexplus.parser.node.model.Node;
 import com.regexplus.test.Case;
@@ -62,11 +64,11 @@ public class Main {
         INode node = Parser.ParseFromString(text);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testThree-1.gv")));
+                    File("testThree-1.gv")));
             Case.writeNode(bw, node);
             bw.close();
             bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testThree-2.gv")));
+                    File("testThree-2.gv")));
             IState[] start = new IState[1];
             IState[] finish = new IState[1];
             ((Node) node).expand(start, finish);
@@ -89,11 +91,11 @@ public class Main {
         INode node = Parser.ParseFromString(text);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testFive-1.gv")));
+                    File("testFive-1.gv")));
             Case.writeNode(bw, node);
             bw.close();
             bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testFive-2.gv")));
+                    File("testFive-2.gv")));
             IState[] start = new IState[1];
             IState[] finish = new IState[1];
             ((Node) node).expand(start, finish);
@@ -122,11 +124,11 @@ public class Main {
         INode node = Parser.ParseFromString(text);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testSeven-1.gv")));
+                    File("testSeven-1.gv")));
             Case.writeNode(bw, node);
             bw.close();
             bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testSeven-2.gv")));
+                    File("testSeven-2.gv")));
             IState[] start = new IState[1];
             IState[] finish = new IState[1];
             ((Node) node).expand(start, finish);
@@ -150,11 +152,11 @@ public class Main {
         INode node = Parser.ParseFromString(text);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testNine-1.gv")));
+                    File("testNine-1.gv")));
             Case.writeNode(bw, node);
             bw.close();
             bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testNine-2.gv")));
+                    File("testNine-2.gv")));
             IState[] start = new IState[1];
             IState[] finish = new IState[1];
             ((Node) node).expand(start, finish);
@@ -179,11 +181,11 @@ public class Main {
         INode node = Parser.ParseFromString(text);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testEleven-1.gv")));
+                    File("testEleven-1.gv")));
             Case.writeNode(bw, node);
             bw.close();
             bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/testEleven-2.gv")));
+                    File("testEleven-2.gv")));
             IState[] start = new IState[1];
             IState[] finish = new IState[1];
             ((Node) node).expand(start, finish);
@@ -315,10 +317,10 @@ public class Main {
         INode node = Parser.ParseFromString(text);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
-                    File("C:/Debug/test-1.gv")));
+                    File("test-1.gv")));
             Case.writeNode(bw, node);
             bw.close();
-            bw = new BufferedWriter(new FileWriter(new File("C:/Debug/test2.gv")));
+            bw = new BufferedWriter(new FileWriter(new File("test2.gv")));
             IState[] start = new IState[1];
             IState[] finish = new IState[1];
             ((Node) node).expand(start, finish);
@@ -1179,6 +1181,25 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
+    public static void testDerivativeOne(String text) {
+        INode node = Parser.ParseFromString(text).derivative();
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("testD1-1.gv")));
+            Case.writeNode(bw, node);
+            bw.close();
+            bw = new BufferedWriter(new FileWriter(new
+                    File("testD1-2.gv")));
+            IState[] start = new IState[1];
+            IState[] finish = new IState[1];
+            ((Node) node).expand(start, finish);
+            Case.writeState(bw, start[0]);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         //if (!isRegistered()) {
         //    checkRuns();
@@ -1215,8 +1236,11 @@ public class Main {
         //}
 
         //SATTestOne();
-        SATTestFour("timetable5.cnf");
+        //SATTestFour("timetable5.cnf");
         //SATTestThree("small.cnf");
+        //testOne();
+
+        testDerivativeOne("(a|b)a(a|b)");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
