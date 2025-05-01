@@ -36,7 +36,11 @@ public class NodeLetter extends Node {
     }
 
     @Override
-    public void expand(IState[] start, IState[] finish) {
+    public boolean expand(IState[] start, IState[] finish) {
+        if (!super.expand(start, finish)) {
+            return false;
+        }
+
         super.expand(start, finish);
         IState[] sta = newEmptyState();
         IState[] stb = newEmptyState();
@@ -44,5 +48,12 @@ public class NodeLetter extends Node {
         new EdgeLetter(sta[0], stb[0], this.getLetter());
         new EdgeEmpty(start[0], sta[0]);
         new EdgeEmpty(stb[0], finish[0]);
+
+        return true;
+    }
+
+    @Override
+    public INode derivative(char ch) {
+        return this.letter == ch ? this : null;
     }
 }

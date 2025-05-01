@@ -21,8 +21,11 @@ public class NodeAnd extends NodePaired {
     }
 
     @Override
-    public void expand(IState[] start, IState[] finish) {
-        super.expand(start, finish);
+    public boolean expand(IState[] start, IState[] finish) {
+        if (!super.expand(start, finish)) {
+            return false;
+        }
+
         IState[] a = this.newEmptyState();
         IState[] b = this.newEmptyState();
         IState[] c = this.newEmptyState();
@@ -39,5 +42,7 @@ public class NodeAnd extends NodePaired {
         ((Node) this.right).expand(c, d);
         new EdgeEmpty(d[0], e[0]);
         new EdgeEmpty(e[0], finish[0]);
+
+        return true;
     }
 }

@@ -8,4 +8,6 @@ public interface INode {
     boolean isAtomic();
 
     List<INode> getChildren();
+
+    INode derivative(char ch);
 }

@@ -10,6 +10,8 @@ import java.util.List;
 
 public class Node implements INode {
     int index = -1;
+    boolean expanded = false;
+    IState[] expandedStates = new IState[2];
 
     public Node() {
     }
@@ -42,12 +44,39 @@ public class Node implements INode {
         return new IState[]{new StateEmpty()};
     }
 
-    public void expand(IState[] start, IState[] finish) {
-        if (start[0] == null) start[0] = new StateEmpty();
-        if (finish[0] == null) finish[0] = new StateEmpty();
+    public boolean expand(IState[] start, IState[] finish) {
+        if (expanded){
+            if (start[0] == null) {
+                start[0] = expandedStates[0];
+            }
+
+            if (finish[0] == null) {
+                finish[0] = expandedStates[1];
+            }
+
+            return false;
+        }
+
+        expandedStates[0] = new StateEmpty();
+
+        expandedStates[1] = new StateEmpty();
+
+        if (start[0] == null) {
+            start[0] = expandedStates[0];
+        }
+
+        if (finish[0] == null) {
+            finish[0] = expandedStates[1];
+        }
+
+        return expanded = true;
     }
 
     protected IState[] newTagState() {
         return new IState[]{new StateTag()};
+    }
+
+    public INode derivative(char ch) {
+        return null;
     }
 }

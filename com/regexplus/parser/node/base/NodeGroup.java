@@ -36,8 +36,19 @@ public class NodeGroup extends Node {
     }
 
     @Override
-    public void expand(IState[] start, IState[] finish) {
+    public boolean expand(IState[] start, IState[] finish) {
+        if (!super.expand(start, finish)) {
+            return false;
+        }
+
         super.expand(start, finish);
         ((Node) this.getGroup()).expand(start, finish);
+
+        return true;
+    }
+
+    @Override
+    public INode derivative(char ch) {
+        return this.group.derivative(ch);
     }
 }

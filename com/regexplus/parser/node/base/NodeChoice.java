@@ -8,6 +8,8 @@ import com.regexplus.parser.node.common.NodeType;
 import com.regexplus.parser.node.model.Node;
 import com.regexplus.parser.node.model.NodePaired;
 
+import java.util.ArrayList;
+
 public class NodeChoice extends NodePaired {
     public int logicalChoiceIndex = -1;
 
@@ -21,7 +23,11 @@ public class NodeChoice extends NodePaired {
     }
 
     @Override
-    public void expand(IState[] start, IState[] finish) {
+    public boolean expand(IState[] start, IState[] finish) {
+        if (!super.expand(start, finish)) {
+            return false;
+        }
+
         super.expand(start, finish);
         IState[] a = this.newEmptyState();
         IState[] b = this.newEmptyState();
@@ -39,5 +45,38 @@ public class NodeChoice extends NodePaired {
         ((State) c[0]).logicalChoiceIndex = this.logicalChoiceIndex;
 
         new EdgeEmpty(d[0], finish[0]);
+
+        return true;
+    }
+
+    @Override
+    public INode derivative(char ch) {
+        ArrayList<INode> list = new ArrayList<>();
+
+        INode r = this.left.derivative(ch);
+
+        if (r != null) {
+            list.add(r);
+        }
+
+        r = this.right.derivative(ch);
+
+        if (r != null) {
+            list.add(r);
+        }
+
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        if (list.size() == 2) {
+            if (list.getFirst() == this.left && list.getLast() == this.right) {
+                return this;
+            }
+
+            return new NodeChoice(list.getFirst(), list.getLast());
+        }
+
+        return list.getFirst();
     }
 }

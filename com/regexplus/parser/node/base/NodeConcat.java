@@ -7,6 +7,8 @@ import com.regexplus.parser.node.common.NodeType;
 import com.regexplus.parser.node.model.Node;
 import com.regexplus.parser.node.model.NodePaired;
 
+import java.util.ArrayList;
+
 public class NodeConcat extends NodePaired {
     public NodeConcat(INode left, INode right) {
         super(left, right);
@@ -18,7 +20,11 @@ public class NodeConcat extends NodePaired {
     }
 
     @Override
-    public void expand(IState[] start, IState[] finish) {
+    public boolean expand(IState[] start, IState[] finish) {
+        if (!super.expand(start, finish)) {
+            return false;
+        }
+
         super.expand(start, finish);
         IState[] a = this.newEmptyState();
         IState[] b = newEmptyState();
@@ -31,5 +37,22 @@ public class NodeConcat extends NodePaired {
         new EdgeEmpty(start[0], a[0]);
         new EdgeEmpty(b[0], c[0]);
         new EdgeEmpty(d[0], finish[0]);
+
+        return true;
+    }
+
+    @Override
+    public INode derivative(char ch) {
+        INode r = this.left.derivative(ch);
+
+        if (r == null) {
+            return null;
+        }
+
+        if (r == this.left) {
+            return this;
+        }
+
+        return new NodeConcat(r, this.right);
     }
 }

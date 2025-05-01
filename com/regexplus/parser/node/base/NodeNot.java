@@ -24,7 +24,10 @@ public class NodeNot extends NodeGroup {
     }
 
     @Override
-    public void expand(IState[] start, IState[] finish) {
+    public boolean expand(IState[] start, IState[] finish) {
+        if (!super.expand(start, finish)) {
+            return false;
+        }
  /*
  super.expand(start, finish);
  if (start == null || start.length == 0) {
@@ -55,5 +58,7 @@ public class NodeNot extends NodeGroup {
         f[0].getOutputEdges().add(edgec);
         a[0].getInputEdges().add(edgea);
         c[0].getInputEdges().add(edgec);
+
+        return true;
     }
 }

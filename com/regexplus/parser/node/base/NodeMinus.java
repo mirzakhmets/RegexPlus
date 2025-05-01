@@ -23,7 +23,11 @@ public class NodeMinus extends NodePaired {
     }
 
     @Override
-    public void expand(IState[] start, IState[] finish) {
+    public boolean expand(IState[] start, IState[] finish) {
+        if (!super.expand(start, finish)) {
+            return false;
+        }
+
         super.expand(start, finish);
         IState[] a = this.newEmptyState();
         IState[] b = this.newEmptyState();
@@ -44,5 +48,7 @@ public class NodeMinus extends NodePaired {
         f[0].getOutputEdges().add(edgec);
         a[0].getInputEdges().add(edgea);
         c[0].getInputEdges().add(edgec);
+
+        return true;
     }
 }

@@ -62,7 +62,11 @@ public class NodeRepeat extends Node {
     }
 
     @Override
-    public void expand(IState[] start, IState[] finish) {
+    public boolean expand(IState[] start, IState[] finish) {
+        if (!super.expand(start, finish)) {
+            return false;
+        }
+
         super.expand(start, finish);
         IState[] a = this.newEmptyState();
         IState[] b = this.newEmptyState();
@@ -77,5 +81,7 @@ public class NodeRepeat extends Node {
             case QUESTION -> new EdgeEmpty(a[0], b[0]);
         }
         new EdgeEmpty(b[0], finish[0]);
+
+        return true;
     }
 }
