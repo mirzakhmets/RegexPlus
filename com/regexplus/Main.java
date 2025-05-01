@@ -1221,9 +1221,9 @@ public class Main {
         try {
             BufferedReader rd = new BufferedReader(new FileReader(fileName));
 
-            String[] snm = rd.readLine().split(" ");
+            String[] snm = rd.readLine().trim().split("\\s+");
 
-            int n = Integer.parseInt(snm[2]), m = Integer.parseInt(snm[3]);
+            int n = Integer.parseInt(snm[2].trim()), m = Integer.parseInt(snm[3].trim());
 
             boolean [][] tblT = new boolean[n][m];
             boolean [][] tblF = new boolean[n][m];
@@ -1239,7 +1239,7 @@ public class Main {
             for (int i = 0; i < m; ++i) {
                 String s = rd.readLine();
 
-                String[] p = s.split(" ");
+                String[] p = s.split("\\s+");
 
                 String ss = "";
 
@@ -1270,7 +1270,7 @@ public class Main {
                 ArrayList<Integer> numbers = new ArrayList<>();
 
                 for (int j = 0; (j + 1) < p.length; ++j) {
-                    int k = Integer.parseInt(p[j]);
+                    int k = Integer.parseInt(p[j].trim());
 
                     numbers.add(k);
                 }
@@ -1420,7 +1420,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)|(.a.)|(..a)");
-        SATTestFive("timetable5.cnf");
+        SATTestFive("hole6.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
