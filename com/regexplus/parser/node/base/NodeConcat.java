@@ -42,6 +42,21 @@ public class NodeConcat extends NodePaired {
     }
 
     @Override
+    public INode derivative() {
+        INode r = this.left.derivative();
+
+        if (r == null) {
+            return null;
+        }
+
+        if (r == this.left) {
+            return this;
+        }
+
+        return new NodeConcat(r, this.right);
+    }
+
+    @Override
     public INode derivative(char ch) {
         INode r = this.left.derivative(ch);
 

@@ -51,6 +51,11 @@ public class NodeAnyLetter extends Node {
     }
 
     @Override
+    public INode derivative() {
+        return this;
+    }
+
+    @Override
     public INode derivative(char ch) {
         return new NodeLetter(ch);
     }

@@ -48,6 +48,11 @@ public class NodeGroup extends Node {
     }
 
     @Override
+    public INode derivative() {
+        return this.group.derivative();
+    }
+
+    @Override
     public INode derivative(char ch) {
         return this.group.derivative(ch);
     }

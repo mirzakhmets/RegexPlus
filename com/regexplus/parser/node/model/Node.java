@@ -76,6 +76,10 @@ public class Node implements INode {
         return new IState[]{new StateTag()};
     }
 
+    public INode derivative() {
+        return null;
+    }
+
     public INode derivative(char ch) {
         return null;
     }

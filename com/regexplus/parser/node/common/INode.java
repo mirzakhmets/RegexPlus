@@ -9,5 +9,7 @@ public interface INode {
 
     List<INode> getChildren();
 
+    INode derivative();
+
     INode derivative(char ch);
 }

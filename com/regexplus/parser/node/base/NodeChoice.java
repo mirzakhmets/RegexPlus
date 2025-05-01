@@ -1,5 +1,6 @@
 package com.regexplus.parser.node.base;
 
+import com.regexplus.Main;
 import com.regexplus.automaton.base.EdgeEmpty;
 import com.regexplus.automaton.common.IState;
 import com.regexplus.automaton.model.State;
@@ -9,6 +10,8 @@ import com.regexplus.parser.node.model.Node;
 import com.regexplus.parser.node.model.NodePaired;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NodeChoice extends NodePaired {
     public int logicalChoiceIndex = -1;
@@ -47,6 +50,33 @@ public class NodeChoice extends NodePaired {
         new EdgeEmpty(d[0], finish[0]);
 
         return true;
+    }
+
+    @Override
+    public INode derivative() {
+        Set<INode> nodes = new HashSet<>();
+
+        for (byte i : Main.alphabet.getBytes()) {
+            INode r = this.left.derivative((char) i);
+
+            nodes.add(r);
+
+            r = this.right.derivative((char) i);
+
+            nodes.add(r);
+        }
+
+        INode result = null;
+
+        for (INode node : nodes) {
+            if (result == null) {
+                result = node;
+            } else {
+                result = new NodeChoice(node, result);
+            }
+        }
+
+        return result;
     }
 
     @Override

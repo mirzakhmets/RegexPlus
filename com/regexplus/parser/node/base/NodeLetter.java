@@ -53,6 +53,11 @@ public class NodeLetter extends Node {
     }
 
     @Override
+    public INode derivative() {
+        return this;
+    }
+
+    @Override
     public INode derivative(char ch) {
         return this.letter == ch ? this : null;
     }
