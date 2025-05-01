@@ -1240,7 +1240,7 @@ public class Main {
         //SATTestThree("small.cnf");
         //testOne();
 
-        testDerivativeOne("(a|b)a(a|b)");
+        testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

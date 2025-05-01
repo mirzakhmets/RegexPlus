@@ -1,5 +1,6 @@
 package com.regexplus.parser.node.model;
 
+import com.regexplus.automaton.base.EdgeEmpty;
 import com.regexplus.automaton.base.StateEmpty;
 import com.regexplus.automaton.base.StateTag;
 import com.regexplus.automaton.common.IState;
@@ -46,13 +47,18 @@ public class Node implements INode {
     }
 
     public boolean expand(IState[] start, IState[] finish) {
+        /*
         if (expanded){
             if (start[0] == null) {
                 start[0] = expandedStates[0];
+            } else {
+                new EdgeEmpty(start[0], expandedStates[0]);
             }
 
             if (finish[0] == null) {
                 finish[0] = expandedStates[1];
+            } else {
+                new EdgeEmpty(expandedStates[1], finish[0]);
             }
 
             return false;
@@ -68,13 +74,31 @@ public class Node implements INode {
 
         if (start[0] == null) {
             start[0] = expandedStates[0];
+        } else {
+            new EdgeEmpty(start[0], expandedStates[0]);
         }
 
         if (finish[0] == null) {
             finish[0] = expandedStates[1];
+        } else {
+            new EdgeEmpty(expandedStates[1], finish[0]);
         }
 
-        return expanded = true;
+        return expanded = true;*/
+
+        if (start[0] == null) {
+            start[0] = new StateEmpty();//this.newEmptyState(); //expandedStates[0];
+        } else {
+            //new EdgeEmpty(start[0], expandedStates[0]);
+        }
+
+        if (finish[0] == null) {
+            finish[0] = new StateEmpty(); //expandedStates[1];
+        } else {
+            //new EdgeEmpty(expandedStates[1], finish[0]);
+        }
+
+        return true;
     }
 
     protected IState[] newTagState() {
