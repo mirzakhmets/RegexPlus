@@ -47,10 +47,10 @@ public class StateAnd extends State {
             //Arrays.fill(visited, false);
             this.currentVisitedCounter = this.visitedCounter;
 
-            //visitedAll[0] = visitedAll[1] = false;
+            visitedAll[0] = visitedAll[1] = false;
         }
 
-        //visitedAll[this.getInputEdges().indexOf(edge)] = true;
+        visitedAll[this.getInputEdges().indexOf(edge)] = true;
 
         //return visitedAll[0] && visitedAll[1];
 

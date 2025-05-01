@@ -102,7 +102,7 @@ public class DeterministicState {
                             andStates.add(outStateAnd);
                         } else {
                             if (!prePass) {
-                                //System.out.println("UNSATSIFIABLE");
+                                System.out.println("UNSATSIFIABLE");
 
                                 //System.exit(0);
 
@@ -162,6 +162,9 @@ public class DeterministicState {
                 }
             }
         }
+
+        System.gc();
+
         if (deterministicState.states.size() == 0) {
             return null;
         }

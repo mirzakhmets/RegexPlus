@@ -1215,7 +1215,7 @@ public class Main {
         //}
 
         //SATTestOne();
-        SATTestFour("50.cnf");
+        SATTestFour("timetable5.cnf");
         //SATTestThree("small.cnf");
 
         if (args.length < 2) {
