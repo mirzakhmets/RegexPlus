@@ -25,9 +25,9 @@ public class NodeNot extends NodeGroup {
 
     @Override
     public boolean expand(IState[] start, IState[] finish) {
-        if (!super.expand(start, finish)) {
-            return false;
-        }
+        //if (!super.expand(start, finish)) {
+        //    return false;
+        //}
  /*
  super.expand(start, finish);
  if (start == null || start.length == 0) {
@@ -37,8 +37,10 @@ public class NodeNot extends NodeGroup {
  finish = this.newEmptyState();
  }
  */
-        if (start[0] == null) start[0] = new StateEmpty();
-        if (finish[0] == null) finish[0] = new StateEmpty();
+        super.expand(start, finish);
+
+        //if (start[0] == null) start[0] = new StateEmpty();
+        //if (finish[0] == null) finish[0] = new StateEmpty();
         IState[] a = this.newEmptyState();
         IState[] b = this.newEmptyState();
         IState[] c = this.newEmptyState();

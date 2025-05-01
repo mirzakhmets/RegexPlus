@@ -42,9 +42,9 @@ public class NodeSetLetter extends Node {
 
     @Override
     public boolean expand(IState[] start, IState[] finish) {
-        if (!super.expand(start, finish)) {
-            return false;
-        }
+        //if (!super.expand(start, finish)) {
+        //    return false;
+        //}
 
         super.expand(start, finish);
         new EdgeSetLetter(start[0], finish[0], this.set);

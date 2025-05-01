@@ -37,9 +37,9 @@ public class NodeGroup extends Node {
 
     @Override
     public boolean expand(IState[] start, IState[] finish) {
-        if (!super.expand(start, finish)) {
-            return false;
-        }
+        //if (!super.expand(start, finish)) {
+        //    return false;
+        //}
 
         super.expand(start, finish);
         ((Node) this.getGroup()).expand(start, finish);

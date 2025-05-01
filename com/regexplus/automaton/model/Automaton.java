@@ -39,6 +39,12 @@ public class Automaton implements IAutomaton {
         node.expand(astart, afinish);
     }
 
+    public void build(Node node) {
+        IState[] astart = new IState[]{this.start};
+        IState[] afinish = new IState[]{this.finish};
+        node.expand(astart, afinish);
+    }
+
     public void buildDerivative(StringStream stream) {
         ParserInputStream pis = new ParserInputStream(new
                 ByteArrayInputStream(stream.getSource().getBytes()));

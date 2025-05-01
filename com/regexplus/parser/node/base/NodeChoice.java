@@ -27,9 +27,9 @@ public class NodeChoice extends NodePaired {
 
     @Override
     public boolean expand(IState[] start, IState[] finish) {
-        if (!super.expand(start, finish)) {
-            return false;
-        }
+        //if (!super.expand(start, finish)) {
+        //    return false;
+        //}
 
         super.expand(start, finish);
         IState[] a = this.newEmptyState();
@@ -59,11 +59,15 @@ public class NodeChoice extends NodePaired {
         for (byte i : Main.alphabet.getBytes()) {
             INode r = this.left.derivative((char) i);
 
-            nodes.add(r);
+            if (r != null) {
+                nodes.add(r);
+            }
 
             r = this.right.derivative((char) i);
 
-            nodes.add(r);
+            if (r != null) {
+                nodes.add(r);
+            }
         }
 
         INode result = null;

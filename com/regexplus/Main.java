@@ -10,6 +10,7 @@ import com.regexplus.match.common.IMatch;
 import com.regexplus.parser.IParserStream;
 import com.regexplus.parser.Parser;
 import com.regexplus.parser.ParserInputStream;
+import com.regexplus.parser.node.base.NodeAnd;
 import com.regexplus.parser.node.common.INode;
 import com.regexplus.parser.node.model.Node;
 import com.regexplus.test.Case;
@@ -1153,7 +1154,7 @@ public class Main {
 
         Automaton automaton = new Automaton();
 
-        automaton.build(new StringStream(/*pattern*/GenerateExpression(v, 0, v.size() - 1)));
+        automaton.build(new StringStream(pattern /*GenerateExpression(v, 0, v.size() - 1)*/));
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
@@ -1200,6 +1201,143 @@ public class Main {
         }
     }
 
+    public static void SATTestFive(String fileName) {
+        long t = System.currentTimeMillis();
+
+        INode resultNode = null;
+
+        try {
+            BufferedReader rd = new BufferedReader(new FileReader(fileName));
+
+            String[] snm = rd.readLine().split(" ");
+
+            int n = Integer.parseInt(snm[2]), m = Integer.parseInt(snm[3]);
+
+            boolean [][] tblT = new boolean[n][m];
+            boolean [][] tblF = new boolean[n][m];
+
+            for (int i = 0; i < tblT.length; ++i) {
+                for (int j = 0; j < tblT[i].length; ++j) {
+                    tblT[i][j] = false;
+
+                    tblF[i][j] = false;
+                }
+            }
+
+            for (int i = 0; i < m; ++i) {
+                String s = rd.readLine();
+
+                String[] p = s.split(" ");
+
+                String ss = "";
+
+                ArrayList<Integer> numbers = new ArrayList<>();
+
+                for (int j = 0; (j + 1) < p.length; ++j) {
+                    int k = Integer.parseInt(p[j]);
+
+                    numbers.add(k);
+                }
+
+                Collections.sort(numbers, new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2) {
+                        if (Math.abs(o1) == Math.abs(o2)) {
+                            System.out.println("Equal");
+                        }
+
+                        return Math.abs(o1) - Math.abs(o2);
+                    }
+                });
+
+                int mink = Math.abs(numbers.getFirst());
+
+                int maxk = Math.abs(numbers.getLast());
+
+                for (int j = 0; j < numbers.size(); ++j) {
+                    String ps = "";
+
+                    int k = 0;
+
+                    for (int z = mink; z <= maxk; ++z) {
+                        if (k <= j) {
+                            if (z == Math.abs(numbers.get(k))) {
+                                if (k == j) {
+                                    if (numbers.get(k) < 0) {
+                                        ps += "b";
+                                    } else {
+                                        ps += "a";
+                                    }
+                                } else {
+                                    if (numbers.get(k) < 0) {
+                                        ps += "a";
+                                    } else {
+                                        ps += "b";
+                                    }
+                                }
+
+                                ++k;
+                            } else {
+                                ps += pad(1);
+                            }
+                        } else {
+                            ps += pad(1);
+                        }
+                    }
+
+                    ps = pad (mink - 1) + "(" + ps + ")" + pad(n - maxk);
+
+                    ps = "(" + ps + ")";
+
+                    if (!ss.isEmpty()) {
+                        ss += "|";
+                    }
+
+                    ss += ps;
+                }
+
+                INode currentNode = Parser.ParseFromString(ss).derivative();
+
+                if (resultNode == null) {
+                    resultNode = currentNode;
+                } else {
+                    resultNode = new NodeAnd(currentNode, resultNode);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Automaton automaton = new Automaton();
+
+        automaton.build((Node) resultNode);
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeState(bw, automaton.getStart());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
     public static void main(String[] args) {
         //if (!isRegistered()) {
         //    checkRuns();
@@ -1240,7 +1378,9 @@ public class Main {
         //SATTestThree("small.cnf");
         //testOne();
 
-        testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
+        //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
+        //testDerivativeOne("(a..)|(.a.)|(..a)");
+        SATTestFive("50.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
