@@ -68,6 +68,15 @@ public class NodeRepeat extends Node {
         //}
 
         super.expand(start, finish);
+
+        if (this.expanded) {
+            new EdgeEmpty(start[0], this.expandedStates[0]);
+
+            new EdgeEmpty(this.expandedStates[1], finish[0]);
+
+            return false;
+        }
+
         IState[] a = this.newEmptyState();
         IState[] b = this.newEmptyState();
         new EdgeEmpty(start[0], a[0]);
@@ -81,6 +90,10 @@ public class NodeRepeat extends Node {
             case QUESTION -> new EdgeEmpty(a[0], b[0]);
         }
         new EdgeEmpty(b[0], finish[0]);
+
+        this.expanded = true;
+        this.expandedStates[0] = a[0];
+        this.expandedStates[1] = b[0];
 
         return true;
     }

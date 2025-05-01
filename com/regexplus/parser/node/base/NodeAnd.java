@@ -27,6 +27,15 @@ public class NodeAnd extends NodePaired {
         //}
 
         super.expand(start, finish);
+
+        if (this.expanded) {
+            new EdgeEmpty(start[0], this.expandedStates[0]);
+
+            new EdgeEmpty(this.expandedStates[1], finish[0]);
+
+            return false;
+        }
+
         IState[] a = this.newEmptyState();
         IState[] b = this.newEmptyState();
         IState[] c = this.newEmptyState();
@@ -43,6 +52,10 @@ public class NodeAnd extends NodePaired {
         ((Node) this.right).expand(c, d);
         new EdgeEmpty(d[0], e[0]);
         new EdgeEmpty(e[0], finish[0]);
+
+        this.expanded = true;
+        this.expandedStates[0] = f[0];
+        this.expandedStates[1] = e[0];
 
         return true;
     }

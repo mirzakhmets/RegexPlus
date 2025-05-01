@@ -26,6 +26,15 @@ public class NodeConcat extends NodePaired {
         //}
 
         super.expand(start, finish);
+
+        if (this.expanded) {
+            new EdgeEmpty(start[0], this.expandedStates[0]);
+
+            new EdgeEmpty(this.expandedStates[1], finish[0]);
+
+            return false;
+        }
+
         IState[] a = this.newEmptyState();
         IState[] b = newEmptyState();
         IState[] c = newEmptyState();
@@ -37,6 +46,10 @@ public class NodeConcat extends NodePaired {
         new EdgeEmpty(start[0], a[0]);
         new EdgeEmpty(b[0], c[0]);
         new EdgeEmpty(d[0], finish[0]);
+
+        this.expanded = true;
+        this.expandedStates[0] = a[0];
+        this.expandedStates[1] = d[0];
 
         return true;
     }

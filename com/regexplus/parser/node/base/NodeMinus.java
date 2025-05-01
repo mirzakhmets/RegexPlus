@@ -29,6 +29,15 @@ public class NodeMinus extends NodePaired {
         //}
 
         super.expand(start, finish);
+
+        if (this.expanded) {
+            new EdgeEmpty(start[0], this.expandedStates[0]);
+
+            new EdgeEmpty(this.expandedStates[1], finish[0]);
+
+            return false;
+        }
+
         IState[] a = this.newEmptyState();
         IState[] b = this.newEmptyState();
         IState[] c = this.newEmptyState();
@@ -48,6 +57,10 @@ public class NodeMinus extends NodePaired {
         f[0].getOutputEdges().add(edgec);
         a[0].getInputEdges().add(edgea);
         c[0].getInputEdges().add(edgec);
+
+        this.expanded = true;
+        this.expandedStates[0] = f[0];
+        this.expandedStates[1] = e[0];
 
         return true;
     }

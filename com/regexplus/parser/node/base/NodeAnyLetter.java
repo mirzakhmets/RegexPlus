@@ -40,12 +40,25 @@ public class NodeAnyLetter extends Node {
         //}
 
         super.expand(start, finish);
+
+        if (this.expanded) {
+            new EdgeEmpty(start[0], this.expandedStates[0]);
+
+            new EdgeEmpty(this.expandedStates[1], finish[0]);
+
+            return false;
+        }
+
         IState[] sta = newEmptyState();
         IState[] stb = newEmptyState();
         //new EdgeAnyLetter(start[0], finish[0]);
         new EdgeAnyLetter(sta[0], stb[0]);
         new EdgeEmpty(start[0], sta[0]);
         new EdgeEmpty(stb[0], finish[0]);
+
+        this.expanded = true;
+        this.expandedStates[0] = sta[0];
+        this.expandedStates[1] = stb[0];
 
         return true;
     }

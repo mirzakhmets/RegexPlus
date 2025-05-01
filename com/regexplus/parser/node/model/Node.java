@@ -11,11 +11,10 @@ import java.util.List;
 
 public class Node implements INode {
     int index = -1;
-    boolean expanded = false;
-    IState[] expandedStates = new IState[2];
+    protected boolean expanded = false;
+    protected IState[] expandedStates = new IState[2];
 
     public Node() {
-        expandedStates[0] = expandedStates[1] = null;
     }
 
     public NodeType getType() {

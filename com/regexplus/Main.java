@@ -1201,10 +1201,22 @@ public class Main {
         }
     }
 
+    public static INode GenerateOptimalNodes(Vector<INode> v, int l, int r) {
+        if (l == r) {
+            return v.get(l);
+        }
+
+        int k = (l + r) / 2;
+
+        return new NodeAnd(GenerateOptimalNodes(v, l, k), GenerateOptimalNodes(v, k + 1, r));
+    }
+
     public static void SATTestFive(String fileName) {
         long t = System.currentTimeMillis();
 
         INode resultNode = null;
+
+        Vector<INode> v = new Vector<>();
 
         try {
             BufferedReader rd = new BufferedReader(new FileReader(fileName));
@@ -1231,6 +1243,29 @@ public class Main {
 
                 String ss = "";
 
+                for (int j = 0; (j + 1) < p.length; ++j) {
+                    int k = Integer.parseInt(p[j]);
+
+                    String ps = "";
+
+                    if (!ss.isEmpty()) {
+                        ss = ss + "|";
+                    }
+
+                    if (k < 0) {
+                        tblF[-k - 1][i] = true;
+
+                        ps = "(" + pad(-k - 1) + "b" + pad(n + k) + ")";
+                    } else {
+                        tblT[k - 1][i] = true;
+
+                        ps = "(" + pad(k - 1) + "a" + pad(n - k) + ")";
+                    }
+
+                    ss += ps;
+                }
+
+                /*
                 ArrayList<Integer> numbers = new ArrayList<>();
 
                 for (int j = 0; (j + 1) < p.length; ++j) {
@@ -1287,6 +1322,7 @@ public class Main {
 
                     ps = pad (mink - 1) + "(" + ps + ")" + pad(n - maxk);
 
+
                     ps = "(" + ps + ")";
 
                     if (!ss.isEmpty()) {
@@ -1295,6 +1331,7 @@ public class Main {
 
                     ss += ps;
                 }
+                */
 
                 INode currentNode = Parser.ParseFromString(ss).derivative();
 
@@ -1303,12 +1340,16 @@ public class Main {
                 } else {
                     resultNode = new NodeAnd(currentNode, resultNode);
                 }
+
+                v.add(currentNode);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         Automaton automaton = new Automaton();
+
+        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1);
 
         automaton.build((Node) resultNode);
 
@@ -1380,7 +1421,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)|(.a.)|(..a)");
-        SATTestFive("50.cnf");
+        SATTestFive("case2.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
