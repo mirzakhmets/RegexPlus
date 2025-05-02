@@ -1349,7 +1349,7 @@ public class Main {
                 */
 
                 INode currentNode = Parser.ParseFromString(ss).derivative();
-                //INode dNode = Parser.ParseFromString(ss).derivative();
+                INode dNode = Parser.ParseFromString(ss).derivative();
 
                 if (currentNode == null) {
                     System.out.println("UNSATSIFIABLE");
@@ -1379,7 +1379,7 @@ public class Main {
                 }*/
 
                 v.add(currentNode);
-                //vb.add(dNode);
+                vb.add(dNode);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1393,9 +1393,9 @@ public class Main {
 
         resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
 
-        System.gc();
+        stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
 
-        //stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
+        System.gc();
 
         //resultNode = resultNode.derivative();
 
@@ -1416,7 +1416,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        /*
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
                     File("nfa.gv")));
@@ -1430,7 +1429,7 @@ public class Main {
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
         DeterministicAutomaton deterministicAutomaton = new
                 DeterministicAutomaton(automaton);
@@ -1491,7 +1490,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("timetable5.cnf");
+        SATTestFive("trivial2.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
