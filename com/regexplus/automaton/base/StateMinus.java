@@ -14,6 +14,7 @@ public class StateMinus extends State {
     public Map<Integer, boolean[]> visited = new HashMap<>();
     int counterVisitIndex;
     boolean passedComputed = false, passed = false;
+    public Tag matchingTag = null;
 
     public StateMinus() {
         super();
@@ -47,6 +48,9 @@ public class StateMinus extends State {
                 } else {
                     v = this.visited.get(t.index);
                 }
+
+                this.matchingTag = t;
+
                 v[t.type] = true;
                 //v[this.getInputEdges().size() - 1 - this.getInputEdges().indexOf(edge)] = true;
 

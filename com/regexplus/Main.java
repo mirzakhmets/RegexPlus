@@ -13,6 +13,7 @@ import com.regexplus.parser.ParserInputStream;
 import com.regexplus.parser.node.base.NodeAnd;
 import com.regexplus.parser.node.base.NodeChoice;
 import com.regexplus.parser.node.base.NodeLetter;
+import com.regexplus.parser.node.base.NodeMinus;
 import com.regexplus.parser.node.common.INode;
 import com.regexplus.parser.node.model.Node;
 import com.regexplus.test.Case;
@@ -1448,6 +1449,145 @@ public class Main {
         System.out.println((System.currentTimeMillis() - t) / 1e+3);
     }
 
+    public static void SATTestSix(String fileName) {
+        int n = -1, m = -1;
+        long t = System.currentTimeMillis();
+
+        String ss = "";
+
+        String pps = "";
+
+        try {
+            BufferedReader rd = new BufferedReader(new FileReader(fileName));
+
+            String[] snm = rd.readLine().trim().split("\\s+");
+
+            n = Integer.parseInt(snm[2].trim());
+            m = Integer.parseInt(snm[3].trim());
+
+            boolean [][] tblT = new boolean[n][m];
+            boolean [][] tblF = new boolean[n][m];
+
+            for (int i = 0; i < tblT.length; ++i) {
+                for (int j = 0; j < tblT[i].length; ++j) {
+                    tblT[i][j] = false;
+
+                    tblF[i][j] = false;
+                }
+            }
+
+            ss = "(" + pad (n) + ")";
+
+            for (int i = 0; i < m; ++i) {
+                String s = rd.readLine();
+
+                String[] p = s.split("\\s+");
+
+                ArrayList<Integer> numbers = new ArrayList<>();
+
+                for (int j = 0; (j + 1) < p.length; ++j) {
+                    int k = Integer.parseInt(p[j].trim());
+
+                    numbers.add(k);
+                }
+
+                Collections.sort(numbers, new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2) {
+                        if (Math.abs(o1) == Math.abs(o2)) {
+                            System.out.println("Equal");
+                        }
+
+                        return Math.abs(o1) - Math.abs(o2);
+                    }
+                });
+
+                String ps = "";
+
+                int e = 0;
+
+                for (Integer j : numbers) {
+                    ps += pad (Math.abs(j) - e - 1);
+
+                    if (j < 0) {
+                        ps += "a";
+                    } else {
+                        ps += "b";
+                    }
+
+                    e = Math.abs(j);
+                }
+
+                ps += pad(n - e);
+
+                if (!pps.isEmpty()) {
+                    pps += "|";
+                }
+
+                pps += "(" + ps + ")";
+
+                ss = "(" + ss + "-(" + ps + ")" + ")";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //INode resultNode = Parser.ParseFromString(pps);
+
+        //ss = ss + "-(" + pps + ")";
+
+        Automaton automaton = new Automaton();
+
+        automaton.build(new NodeMinus(Parser.ParseFromString(pad(n)), Parser.ParseFromString(pps).derivative()));
+
+        //automaton.build(new StringStream(ss));
+
+        System.gc();
+
+        /*
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("pattern.gv")));
+            Case.writeNode(bw, resultNode);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("nfa.gv")));
+
+            Automaton a2 = new Automaton();
+
+            a2.build((Node) stateNode);
+
+            Case.writeState(bw, a2.getStart());
+
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+         */
+
+        DeterministicAutomaton deterministicAutomaton = new
+                DeterministicAutomaton(automaton);
+
+        System.out.println(deterministicAutomaton.states.size());
+
+        try {
+            FileOutputStream fos = new
+                    FileOutputStream("dfa.gv");
+            deterministicAutomaton.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println((System.currentTimeMillis() - t) / 1e+3);
+    }
+
     public static void main(String[] args) {
         //if (!isRegistered()) {
         //    checkRuns();
@@ -1490,7 +1630,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("trivial2.cnf");
+        SATTestSix("trivial2.cnf"); // 237 sec, 108 sec
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

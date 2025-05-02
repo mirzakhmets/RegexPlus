@@ -54,13 +54,11 @@ public class DeterministicAutomaton {
             byte[] t = Main.alphabet.getBytes();
 
             for (byte i : t) {
-                /*
-                tags;
-
+                // tags;
                 for (State s: this.nfaStates) {
                     s.tags.clear();
                 }
-                */
+                // tags;
 
                 for (State s: this.nfaStates) {
                     if (s.getType() == StateType.AND) {
@@ -71,18 +69,18 @@ public class DeterministicAutomaton {
                     }
                 }
 
-                /* tags;
+                // tags;
                 for (StateTagPair tag: state.tags) {
                     tag.state.tags.putAll(tag.tags);
                 }
-                */
+                // tags;
 
                 DeterministicState s = state.step((char) i);
 
                 if (s != null && s.isFinal) {
                     System.out.println("SATISFIABLE: " + s.index);
 
-                    //System.exit(0);
+                    System.exit(0);
                 }
 
                 state.transitions[i] = s;
@@ -94,7 +92,7 @@ public class DeterministicAutomaton {
 
                     s.visitIndex = DeterministicState.VISIT_INDEX;
 
-                    System.out.println(s.level + " " + this.states.size());
+                    //System.out.println(s.level + " " + this.states.size());
                 }
             }
         }
