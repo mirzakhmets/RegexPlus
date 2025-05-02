@@ -54,9 +54,14 @@ public class DeterministicAutomaton {
             byte[] t = Main.alphabet.getBytes();
 
             for (byte i : t) {
+                /*
+                tags;
+
                 for (State s: this.nfaStates) {
                     s.tags.clear();
                 }
+                */
+
                 for (State s: this.nfaStates) {
                     if (s.getType() == StateType.AND) {
                         ((StateAnd) s).visited.clear();
@@ -65,9 +70,13 @@ public class DeterministicAutomaton {
                         ((StateMinus) s).visited.clear();
                     }
                 }
+
+                /* tags;
                 for (StateTagPair tag: state.tags) {
                     tag.state.tags.putAll(tag.tags);
                 }
+                */
+
                 DeterministicState s = state.step((char) i);
 
                 if (s != null && s.isFinal) {

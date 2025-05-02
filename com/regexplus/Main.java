@@ -1491,7 +1491,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("timetable5.cnf");
+        SATTestFive("trivial.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

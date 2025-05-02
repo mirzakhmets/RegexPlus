@@ -36,12 +36,16 @@ public class DeterministicState {
         this.automaton = automaton;
     }
     public void closure() {
+        /* tags;
         for (State s: this.automaton.nfaStates) {
             s.tags.clear();
         }
+
         for (StateTagPair tag: this.tags) {
             tag.state.tags.putAll(tag.tags);
         }
+        */
+
         Stack<State> stack = new Stack<>();
         ++NFA_VISIT_INDEX;
         Collections.reverse(this.orderedStates);
@@ -58,6 +62,10 @@ public class DeterministicState {
             if (state.getType() == StateType.FINAL) {
                 this.isFinal = true;
             }
+
+            /*
+            tags
+
             if (state.getType() == StateType.TAG) {
                 Tag ta = new Tag();
                 Tag tb = new Tag();
@@ -81,6 +89,8 @@ public class DeterministicState {
                 ((State) state.getOutputEdges().get(0).getFinish()).addTag(ta);
                 ((State) state.getOutputEdges().get(1).getFinish()).addTag(tb);
             }
+            */
+
             for (IEdge edge: state.getOutputEdges()) {
                 if (edge.getType() == EdgeType.EMPTY && ((State)
                         edge.getFinish()).getVisitIndex() != NFA_VISIT_INDEX
@@ -89,9 +99,13 @@ public class DeterministicState {
                     State outState = (State) edge.getFinish();
                     boolean prePass = true;
                     outState.assignTags(state);
+
+                    /* tags
                     StateTagPair pair = new StateTagPair(outState);
                     pair.tags.putAll(outState.tags);
                     this.tags.add(pair);
+                    */
+
                     if (outState.getType() == StateType.AND) {
                         StateAnd outStateAnd = (StateAnd) outState;
                         prePass = outStateAnd.visit(NFA_VISIT_INDEX, edge);
@@ -125,6 +139,8 @@ public class DeterministicState {
                             NFA_VISIT_INDEX && !deterministicState.states.contains((State)
                             e.getFinish())) {
                         ((State) e.getFinish()).setVisitIndex(NFA_VISIT_INDEX);
+
+                        /* tags
                         StateTagPair pair = new StateTagPair(((State)
                                 e.getFinish()));
                         pair.tags.putAll(s.tags);
@@ -132,6 +148,8 @@ public class DeterministicState {
                         //pairs.add(pair);
                         deterministicState.tags.add(pair);
                         //result.add(((State) e.getFinish()));
+                        */
+
                         deterministicState.states.add((State) e.getFinish());
                         deterministicState.orderedStates.add((State) e.getFinish());
                     }

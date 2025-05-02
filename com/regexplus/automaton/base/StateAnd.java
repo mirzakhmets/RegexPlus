@@ -13,6 +13,8 @@ public class StateAnd extends State {
     int /*counter, */counterVisitIndex;
     //boolean[] visited;
     public Map<Integer, boolean[]> visited = new HashMap<>();
+    public boolean visitedAll[] = new boolean[2];
+
     public StateAnd() {
         super ();
         this.counterVisitIndex = -1;
@@ -25,9 +27,19 @@ public class StateAnd extends State {
             this.counterVisitIndex = visitIndex;
             //this.counter = this.getInputEdges().size();
             this.visited.clear();
+
+            visitedAll[0] = visitedAll[1] = false;
+
             //this.visited = new boolean[this.getInputEdges().size()];
             //Arrays.fill(visited, false);
         }
+
+        visitedAll[this.getInputEdges().indexOf(edge)] = true;
+
+        return visitedAll[0] && visitedAll[1];
+
+        /* tags
+
         for (Tag t: ((State) edge.getStart()).tags.values()) {
             if (t.finalState == this) {
                 boolean v[] = null;
@@ -66,6 +78,6 @@ this.matches().get(0).start()
         //visited[this.getInputEdges().indexOf(edge)] = true;
 
         //return this.counter == 0;
-        return false;
+        //return false;
     }
 }
