@@ -1348,8 +1348,8 @@ public class Main {
                     ss += ps;
                 }
 
-                INode currentNode = Parser.ParseFromString(ss);//.derivative();
-                INode dNode = Parser.ParseFromString(ss);//.derivative();
+                INode currentNode = Parser.ParseFromString(ss).derivative();
+                INode dNode = Parser.ParseFromString(ss).derivative();
 
                 if (currentNode == null) {
                     System.out.println("UNSATSIFIABLE");
@@ -1376,11 +1376,11 @@ public class Main {
 
         //v.add(new NodeAnd(new NodeChoice(new NodeLetter('a'), new NodeLetter('a')), new NodeLetter('b')));
 
-        //resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
+        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
 
-        //stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
+        stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
 
-        resultNode = resultNode.derivative();
+        //resultNode = resultNode.derivative();
 
         //stateNode = stateNode.derivative();
 
@@ -1470,7 +1470,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("case2.cnf");
+        SATTestFive("timetable5.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

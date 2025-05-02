@@ -75,13 +75,15 @@ public class NodeChoice extends NodePaired {
             INode r = this.left.derivative((char) i);
 
             if (r != null) {
-                nodes.add(r.clone());
+                //r = r.clone();
+                nodes.add(r);
             }
 
             r = this.right.derivative((char) i);
 
             if (r != null) {
-                nodes.add(r.clone());
+                //r = r.clone();
+                nodes.add(r);
             }
         }
 
@@ -105,13 +107,15 @@ public class NodeChoice extends NodePaired {
         INode r = this.left.derivative(ch);
 
         if (r != null) {
-            list.add(r.clone());
+            //r = r.clone();
+            list.add(r);
         }
 
         r = this.right.derivative(ch);
 
         if (r != null) {
-            list.add(r.clone());
+            //r = r.clone();
+            list.add(r);
         }
 
         if (list.isEmpty()) {
@@ -119,9 +123,9 @@ public class NodeChoice extends NodePaired {
         }
 
         if (list.size() == 2) {
-            //if (list.getFirst() == this.left && list.getLast() == this.right) {
-            //    return this;
-            //}
+            if (list.getFirst() == this.left && list.getLast() == this.right) {
+                return this;
+            }
 
             return new NodeChoice(list.getFirst(), list.getLast());
         }

@@ -62,11 +62,12 @@ public class NodeConcat extends NodePaired {
             return null;
         }
 
-        //if (r == this.left) {
-        //    return this;
-        //}
+        if (r == this.left) {
+            return this;
+        }
 
-        return new NodeConcat(r.clone(), this.right.clone());
+        // r = r.clone();
+        return new NodeConcat(r, this.right/*.clone()*/);
     }
 
     @Override
@@ -77,11 +78,12 @@ public class NodeConcat extends NodePaired {
             return null;
         }
 
-        //if (r == this.left) {
-        //    return this;
-        //}
+        if (r == this.left) {
+            return this;
+        }
 
-        return new NodeConcat(r.clone(), this.right.clone());
+        // r = r.clone()
+        return new NodeConcat(r, this.right/*.clone()*/);
     }
 
     @Override

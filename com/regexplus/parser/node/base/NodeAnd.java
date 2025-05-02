@@ -76,7 +76,8 @@ public class NodeAnd extends NodePaired {
             Set<INode> newNodes = new HashSet<>();
 
             if (r != null) {
-                newNodes.add(r.clone());
+                //r = r.clone();
+                newNodes.add(r);
             } else {
                 continue;
             }
@@ -84,7 +85,8 @@ public class NodeAnd extends NodePaired {
             r = this.right.derivative((char) i);
 
             if (r != null) {
-                newNodes.add(r.clone());
+                //r = r.clone();
+                newNodes.add(r);
             } else {
                 continue;
             }
@@ -124,13 +126,15 @@ public class NodeAnd extends NodePaired {
         INode r = this.left.derivative(ch);
 
         if (r != null) {
-            list.add(r.clone());
+            //r = r.clone();
+            list.add(r);
         }
 
         r = this.right.derivative(ch);
 
         if (r != null) {
-            list.add(r.clone());
+            //r = r.clone();
+            list.add(r);
         }
 
         if (list.isEmpty()) {
@@ -142,9 +146,9 @@ public class NodeAnd extends NodePaired {
         }
 
         if (list.size() == 2) {
-            //if (list.getFirst() == this.left && list.getLast() == this.right) {
-            //    return this;
-            //}
+            if (list.getFirst() == this.left && list.getLast() == this.right) {
+                return this;
+            }
 
             return new NodeAnd(list.getFirst(), list.getLast());
         }

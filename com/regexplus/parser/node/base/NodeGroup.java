@@ -55,7 +55,8 @@ public class NodeGroup extends Node {
             return null;
         }
 
-        return new NodeGroup(result.clone());
+        //return new NodeGroup(result.clone());
+        return result;
     }
 
     @Override
@@ -66,7 +67,8 @@ public class NodeGroup extends Node {
             return null;
         }
 
-        return new NodeGroup(result.clone());
+        //return new NodeGroup(result.clone());
+        return result;
     }
 
     @Override

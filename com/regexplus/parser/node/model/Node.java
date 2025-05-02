@@ -113,7 +113,7 @@ public class Node implements INode {
     }
 
     protected void setExpanded() {
-        //this.expanded = true;
+        this.expanded = true;
     }
 
     public INode clone() {

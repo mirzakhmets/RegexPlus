@@ -67,14 +67,14 @@ public class NodeLetter extends Node {
 
     @Override
     public INode derivative() {
-        //return this;
-        return new NodeLetter(this.letter);
+        return this;
+        //return new NodeLetter(this.letter);
     }
 
     @Override
     public INode derivative(char ch) {
-        //return this.letter == ch ? this : null;
-        return this.letter == ch ? new NodeLetter(this.letter) : null;
+        return this.letter == ch ? this : null;
+        //return this.letter == ch ? new NodeLetter(this.letter) : null;
     }
 
     @Override
