@@ -97,7 +97,11 @@ public class NodeAnd extends NodePaired {
                 if (p == null) {
                     p = j;
                 } else {
-                    p = new NodeAnd(j, p);
+                    if (j == this.right && p == this.left) {
+                        p = this;
+                    } else {
+                        p = new NodeAnd(j, p);
+                    }
                 }
             }
 

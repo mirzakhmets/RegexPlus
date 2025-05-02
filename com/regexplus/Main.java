@@ -1259,7 +1259,6 @@ public class Main {
 
                 String ss = "";
 
-                /*
                 for (int j = 0; (j + 1) < p.length; ++j) {
                     int k = Integer.parseInt(p[j]);
 
@@ -1281,8 +1280,8 @@ public class Main {
 
                     ss += ps;
                 }
-                 */
 
+                /*
                 ArrayList<Integer> numbers = new ArrayList<>();
 
                 for (int j = 0; (j + 1) < p.length; ++j) {
@@ -1347,6 +1346,7 @@ public class Main {
 
                     ss += ps;
                 }
+                */
 
                 INode currentNode = Parser.ParseFromString(ss).derivative();
                 //INode dNode = Parser.ParseFromString(ss).derivative();
@@ -1491,7 +1491,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("trivial.cnf");
+        SATTestFive("timetable5.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
