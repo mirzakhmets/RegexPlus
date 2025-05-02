@@ -76,8 +76,6 @@ public class NodeAnd extends NodePaired {
             if (r != null) {
                 newNodes.add(r);
             } else {
-                System.out.println("zz");
-
                 continue;
             }
 
@@ -86,8 +84,6 @@ public class NodeAnd extends NodePaired {
             if (r != null) {
                 newNodes.add(r);
             } else {
-                System.out.println("ee");
-
                 continue;
             }
 
@@ -112,8 +108,6 @@ public class NodeAnd extends NodePaired {
             if (result == null) {
                 result = node;
             } else {
-                System.out.println(node.getType());
-
                 result = new NodeChoice(node, result);
             }
         }
