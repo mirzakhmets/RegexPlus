@@ -1,0 +1,17 @@
+digraph G {
+node_1 [shape=circle,label="1"];
+	node_1 -> node_2 [label="a"];
+	node_1 -> node_3 [label="b"];
+node_7 [shape=doublecircle,label="7"];
+node_3 [shape=circle,label="3"];
+	node_3 -> node_4 [label="a"];
+	node_3 -> node_5 [label="b"];
+node_4 [shape=doublecircle,label="4"];
+node_2 [shape=circle,label="2"];
+	node_2 -> node_6 [label="a"];
+	node_2 -> node_7 [label="b"];
+node_6 [shape=doublecircle,label="6"];
+node_0 [shape=circle,label="0"];
+	node_0 -> node_1 [label="a"];
+node_5 [shape=circle,label="5"];
+}

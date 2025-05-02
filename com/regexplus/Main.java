@@ -1191,11 +1191,24 @@ public class Main {
             bw.close();
             bw = new BufferedWriter(new FileWriter(new
                     File("testD1-2.gv")));
+
             IState[] start = new IState[1];
             IState[] finish = new IState[1];
             ((Node) node).expand(start, finish);
             Case.writeState(bw, start[0]);
             bw.close();
+
+            Automaton automaton = new Automaton();
+
+            automaton.buildDerivative(new StringStream(text));
+
+            DeterministicAutomaton deterministicAutomaton = new DeterministicAutomaton(automaton);
+
+            FileOutputStream fos = new FileOutputStream("testD1-3.gv");
+
+            deterministicAutomaton.write(fos);
+
+            fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1348,7 +1361,7 @@ public class Main {
 
         Automaton automaton = new Automaton();
 
-        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1);
+        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
 
         automaton.build((Node) resultNode);
 
@@ -1419,8 +1432,8 @@ public class Main {
         //testOne();
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
-        //testDerivativeOne("(a..)|(.a.)|(..a)");
-        SATTestFive("hole6.cnf");
+        //testDerivativeOne("(a..)&(.a.)&(..a)");
+        SATTestFive("case1.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

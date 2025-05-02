@@ -1,5 +1,6 @@
 package com.regexplus.parser.node.base;
 
+import com.regexplus.Main;
 import com.regexplus.automaton.base.EdgeEmpty;
 import com.regexplus.automaton.base.StateAnd;
 import com.regexplus.automaton.base.StateTag;
@@ -9,6 +10,10 @@ import com.regexplus.parser.node.common.INode;
 import com.regexplus.parser.node.common.NodeType;
 import com.regexplus.parser.node.model.Node;
 import com.regexplus.parser.node.model.NodePaired;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NodeAnd extends NodePaired {
     public NodeAnd(INode left, INode right) {
@@ -58,5 +63,92 @@ public class NodeAnd extends NodePaired {
         this.expandedStates[1] = e[0];
 
         return true;
+    }
+
+    @Override
+    public INode derivative() {
+        Set<INode> nodes = new HashSet<>();
+
+        for (byte i : Main.alphabet.getBytes()) {
+            INode r = this.left.derivative((char) i);
+            Set<INode> newNodes = new HashSet<>();
+
+            if (r != null) {
+                newNodes.add(r);
+            } else {
+                System.out.println("zz");
+
+                continue;
+            }
+
+            r = this.right.derivative((char) i);
+
+            if (r != null) {
+                newNodes.add(r);
+            } else {
+                System.out.println("ee");
+
+                continue;
+            }
+
+            INode p = null;
+
+            for (INode j : newNodes) {
+                if (p == null) {
+                    p = j;
+                } else {
+                    p = new NodeAnd(j, p);
+                }
+            }
+
+            if (p != null) {
+                nodes.add(p);
+            }
+        }
+
+        INode result = null;
+
+        for (INode node : nodes) {
+            if (result == null) {
+                result = node;
+            } else {
+                System.out.println(node.getType());
+
+                result = new NodeChoice(node, result);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public INode derivative(char ch) {
+        ArrayList<INode> list = new ArrayList<>();
+
+        INode r = this.left.derivative(ch);
+
+        if (r != null) {
+            list.add(r);
+        }
+
+        r = this.right.derivative(ch);
+
+        if (r != null) {
+            list.add(r);
+        }
+
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        if (list.size() == 2) {
+            if (list.getFirst() == this.left && list.getLast() == this.right) {
+                return this;
+            }
+
+            return new NodeChoice(list.getFirst(), list.getLast());
+        }
+
+        return list.getFirst();
     }
 }
