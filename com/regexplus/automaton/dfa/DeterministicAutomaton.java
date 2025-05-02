@@ -80,7 +80,12 @@ public class DeterministicAutomaton {
                 if (s != null && s.visitIndex !=
                         DeterministicState.VISIT_INDEX) {
                     detStack.push(s);
+
+                    s.level = state.level + 1;
+
                     s.visitIndex = DeterministicState.VISIT_INDEX;
+
+                    System.out.println(s.level + " " + this.states.size());
                 }
             }
         }

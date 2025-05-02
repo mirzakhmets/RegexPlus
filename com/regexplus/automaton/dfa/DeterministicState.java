@@ -29,6 +29,8 @@ public class DeterministicState {
     public List<InputEdge> inputEdges = new ArrayList<>();
     public static int VISIT_INDEX = -1;
     public static int NFA_VISIT_INDEX = -1;
+    public int level = 0;
+
     public DeterministicState(DeterministicAutomaton automaton) {
         this.index = -1;
         this.automaton = automaton;

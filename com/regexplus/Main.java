@@ -1259,7 +1259,7 @@ public class Main {
 
                 String ss = "";
 
-
+                /*
                 for (int j = 0; (j + 1) < p.length; ++j) {
                     int k = Integer.parseInt(p[j]);
 
@@ -1281,8 +1281,8 @@ public class Main {
 
                     ss += ps;
                 }
+                 */
 
-                /*
                 ArrayList<Integer> numbers = new ArrayList<>();
 
                 for (int j = 0; (j + 1) < p.length; ++j) {
@@ -1348,8 +1348,6 @@ public class Main {
                     ss += ps;
                 }
 
-                 */
-
                 INode currentNode = Parser.ParseFromString(ss).derivative();
                 //INode dNode = Parser.ParseFromString(ss).derivative();
 
@@ -1359,12 +1357,19 @@ public class Main {
                     System.exit(0);
                 }
 
-
+                /*
                 if (resultNode == null) {
                     resultNode = currentNode;
                 } else {
-                    resultNode = new NodeAnd(currentNode, resultNode);
+                    resultNode = new NodeAnd(currentNode, resultNode).derivative();
+
+                    if (resultNode == null) {
+                        System.out.println("UNSATSIFIABLE");
+
+                        System.exit(0);
+                    }
                 }
+                 */
 
                 /*
                 if (stateNode == null) {
@@ -1386,11 +1391,13 @@ public class Main {
 
         //v.add(new NodeAnd(new NodeChoice(new NodeLetter('a'), new NodeLetter('a')), new NodeLetter('b')));
 
-        //resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
+        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
+
+        System.gc();
 
         //stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
 
-        resultNode = resultNode.derivative();
+        //resultNode = resultNode.derivative();
 
         //stateNode = stateNode.derivative();
 
@@ -1484,7 +1491,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("trivial.cnf");
+        SATTestFive("timetable5.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
