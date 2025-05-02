@@ -51,4 +51,13 @@ public class NodeSetLetter extends Node {
 
         return true;
     }
+
+    @Override
+    public INode clone() {
+        NodeSetLetter result = new NodeSetLetter();
+
+        result.set = this.set;
+
+        return result;
+    }
 }

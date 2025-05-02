@@ -65,11 +65,17 @@ public class NodeAnyLetter extends Node {
 
     @Override
     public INode derivative() {
-        return this;
+        //return this;
+        return new NodeAnyLetter();
     }
 
     @Override
     public INode derivative(char ch) {
         return new NodeLetter(ch);
+    }
+
+    @Override
+    public INode clone() {
+        return new NodeAnyLetter();
     }
 }

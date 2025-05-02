@@ -12,4 +12,6 @@ public interface INode {
     INode derivative();
 
     INode derivative(char ch);
+
+    INode clone();
 }

@@ -64,4 +64,9 @@ public class NodeMinus extends NodePaired {
 
         return true;
     }
+
+    @Override
+    public INode clone() {
+        return new NodeMinus(this.left.clone(), this.right.clone());
+    }
 }

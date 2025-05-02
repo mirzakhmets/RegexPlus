@@ -75,4 +75,9 @@ public class NodeNot extends NodeGroup {
 
         return true;
     }
+
+    @Override
+    public INode clone() {
+        return new NodeNot(this.group.clone());
+    }
 }

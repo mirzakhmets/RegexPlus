@@ -62,11 +62,11 @@ public class NodeConcat extends NodePaired {
             return null;
         }
 
-        if (r == this.left) {
-            return this;
-        }
+        //if (r == this.left) {
+        //    return this;
+        //}
 
-        return new NodeConcat(r, this.right);
+        return new NodeConcat(r.clone(), this.right.clone());
     }
 
     @Override
@@ -77,10 +77,15 @@ public class NodeConcat extends NodePaired {
             return null;
         }
 
-        if (r == this.left) {
-            return this;
-        }
+        //if (r == this.left) {
+        //    return this;
+        //}
 
-        return new NodeConcat(r, this.right);
+        return new NodeConcat(r.clone(), this.right.clone());
+    }
+
+    @Override
+    public INode clone() {
+        return new NodeConcat(this.left.clone(), this.right.clone());
     }
 }

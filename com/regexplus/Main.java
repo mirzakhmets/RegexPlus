@@ -1349,7 +1349,7 @@ public class Main {
                 }
 
                 INode currentNode = Parser.ParseFromString(ss);//.derivative();
-                INode dNode = Parser.ParseFromString(ss);
+                INode dNode = Parser.ParseFromString(ss);//.derivative();
 
                 if (currentNode == null) {
                     System.out.println("UNSATSIFIABLE");
@@ -1357,12 +1357,11 @@ public class Main {
                     System.exit(0);
                 }
 
-                /*
                 if (resultNode == null) {
                     resultNode = currentNode;
                 } else {
                     resultNode = new NodeAnd(currentNode, resultNode);
-                }*/
+                }
 
                 v.add(currentNode);
                 vb.add(dNode);
@@ -1377,9 +1376,13 @@ public class Main {
 
         //v.add(new NodeAnd(new NodeChoice(new NodeLetter('a'), new NodeLetter('a')), new NodeLetter('b')));
 
-        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1);//.derivative();
+        //resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
 
-        stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1);//.derivative();
+        //stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
+
+        //resultNode = resultNode.derivative();
+
+        //stateNode = stateNode.derivative();
 
         automaton.build((Node) resultNode);
 
@@ -1392,6 +1395,7 @@ public class Main {
             e.printStackTrace();
         }
 
+        /*
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
                     File("nfa.gv")));
@@ -1405,7 +1409,7 @@ public class Main {
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         DeterministicAutomaton deterministicAutomaton = new
                 DeterministicAutomaton(automaton);

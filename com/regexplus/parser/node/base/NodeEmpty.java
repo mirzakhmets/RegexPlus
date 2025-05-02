@@ -38,4 +38,9 @@ public class NodeEmpty extends Node {
 
         return true;
     }
+
+    @Override
+    public INode clone() {
+        return new NodeEmpty();
+    }
 }

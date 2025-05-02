@@ -97,4 +97,13 @@ public class NodeRepeat extends Node {
 
         return true;
     }
+
+    @Override
+    public INode clone() {
+        NodeRepeat result = new NodeRepeat(this.node.clone(), this.min, this.max);
+
+        result.repeatType = this.repeatType;
+
+        return result;
+    }
 }
