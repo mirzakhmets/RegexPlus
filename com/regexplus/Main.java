@@ -1259,7 +1259,7 @@ public class Main {
 
                 String ss = "";
 
-                /*
+
                 for (int j = 0; (j + 1) < p.length; ++j) {
                     int k = Integer.parseInt(p[j]);
 
@@ -1281,8 +1281,8 @@ public class Main {
 
                     ss += ps;
                 }
-                 */
 
+                /*
                 ArrayList<Integer> numbers = new ArrayList<>();
 
                 for (int j = 0; (j + 1) < p.length; ++j) {
@@ -1348,8 +1348,10 @@ public class Main {
                     ss += ps;
                 }
 
+                 */
+
                 INode currentNode = Parser.ParseFromString(ss).derivative();
-                INode dNode = Parser.ParseFromString(ss).derivative();
+                //INode dNode = Parser.ParseFromString(ss).derivative();
 
                 if (currentNode == null) {
                     System.out.println("UNSATSIFIABLE");
@@ -1357,14 +1359,22 @@ public class Main {
                     System.exit(0);
                 }
 
+
                 if (resultNode == null) {
                     resultNode = currentNode;
                 } else {
                     resultNode = new NodeAnd(currentNode, resultNode);
                 }
 
+                /*
+                if (stateNode == null) {
+                    stateNode = dNode;
+                } else {
+                    stateNode = new NodeAnd(dNode, stateNode);
+                }*/
+
                 v.add(currentNode);
-                vb.add(dNode);
+                //vb.add(dNode);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1376,13 +1386,17 @@ public class Main {
 
         //v.add(new NodeAnd(new NodeChoice(new NodeLetter('a'), new NodeLetter('a')), new NodeLetter('b')));
 
-        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
+        //resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
 
-        stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
+        //stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
 
-        //resultNode = resultNode.derivative();
+        resultNode = resultNode.derivative();
 
         //stateNode = stateNode.derivative();
+
+        //resultNode = GenerateOptimalNodes(v, 0, v.size() - 1);
+
+        //stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1);
 
         automaton.build((Node) resultNode);
 
@@ -1470,7 +1484,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("timetable5.cnf");
+        SATTestFive("trivial.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
