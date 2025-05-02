@@ -146,7 +146,7 @@ public class NodeAnd extends NodePaired {
             //    return this;
             //}
 
-            return new NodeChoice(list.getFirst(), list.getLast());
+            return new NodeAnd(list.getFirst(), list.getLast());
         }
 
         return list.getFirst();

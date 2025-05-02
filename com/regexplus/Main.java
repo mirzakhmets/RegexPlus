@@ -1380,7 +1380,7 @@ public class Main {
 
         //stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1).derivative();
 
-        //resultNode = resultNode.derivative();
+        resultNode = resultNode.derivative();
 
         //stateNode = stateNode.derivative();
 
@@ -1470,7 +1470,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("small.cnf");
+        SATTestFive("case2.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
