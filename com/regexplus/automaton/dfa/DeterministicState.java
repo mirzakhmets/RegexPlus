@@ -37,6 +37,7 @@ public class DeterministicState {
     }
     public void closure() {
         // tags;
+        /*
         for (State s: this.automaton.nfaStates) {
             s.tags.clear();
         }
@@ -44,6 +45,7 @@ public class DeterministicState {
         for (StateTagPair tag: this.tags) {
             tag.state.tags.putAll(tag.tags);
         }
+        */
         // tags;
 
         Stack<State> stack = new Stack<>();
@@ -64,6 +66,7 @@ public class DeterministicState {
             }
 
             // tags;
+            /*
             if (state.getType() == StateType.TAG) {
                 Tag ta = new Tag();
                 Tag tb = new Tag();
@@ -87,6 +90,7 @@ public class DeterministicState {
                 ((State) state.getOutputEdges().get(0).getFinish()).addTag(ta);
                 ((State) state.getOutputEdges().get(1).getFinish()).addTag(tb);
             }
+            */
             // tags;
 
             for (IEdge edge: state.getOutputEdges()) {
@@ -99,12 +103,15 @@ public class DeterministicState {
                     outState.assignTags(state);
 
                     // tags;
+                    /*
                     StateTagPair pair = new StateTagPair(outState);
                     pair.tags.putAll(outState.tags);
                     this.tags.add(pair);
+                    */
                     // tags;
 
                     Tag minusTag = null;
+                    int minusIndex = -1;
                     boolean minus = false;
 
                     if (outState.getType() == StateType.AND) {
@@ -117,12 +124,12 @@ public class DeterministicState {
 
                         minus = true;
 
-                        //minusIndex = outStateMinus.getInputEdges().indexOf(edge);
+                        minusIndex = outStateMinus.getInputEdges().indexOf(edge);
 
                         minusTag = outStateMinus.matchingTag;
                     }
                     if (outState.getVisitIndex() != NFA_VISIT_INDEX &&
-                            prePass && (!minus || (minus && minusTag.type != 0))) {
+                            prePass && (!minus || (minus && /*minusTag.type != 0*/minusIndex != 1))) {
                         outState.setVisitIndex(NFA_VISIT_INDEX);
                         stack.push(outState);
                         if (Match.isBetter(state.matches(), outState.matches())) {
@@ -148,6 +155,7 @@ public class DeterministicState {
                         ((State) e.getFinish()).setVisitIndex(NFA_VISIT_INDEX);
 
                         // tags;
+                        /*
                         StateTagPair pair = new StateTagPair(((State)
                                 e.getFinish()));
                         pair.tags.putAll(s.tags);
@@ -155,6 +163,7 @@ public class DeterministicState {
                         //pairs.add(pair);
                         deterministicState.tags.add(pair);
                         //result.add(((State) e.getFinish()));
+                        */
                         // tags;
 
                         deterministicState.states.add((State) e.getFinish());

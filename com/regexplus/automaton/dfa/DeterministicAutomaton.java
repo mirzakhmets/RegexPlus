@@ -55,9 +55,9 @@ public class DeterministicAutomaton {
 
             for (byte i : t) {
                 // tags;
-                for (State s: this.nfaStates) {
+                /*for (State s: this.nfaStates) {
                     s.tags.clear();
-                }
+                }*/
                 // tags;
 
                 for (State s: this.nfaStates) {
@@ -70,9 +70,10 @@ public class DeterministicAutomaton {
                 }
 
                 // tags;
+                /*
                 for (StateTagPair tag: state.tags) {
                     tag.state.tags.putAll(tag.tags);
-                }
+                }*/
                 // tags;
 
                 DeterministicState s = state.step((char) i);

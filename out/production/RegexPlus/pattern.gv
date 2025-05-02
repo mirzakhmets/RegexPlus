@@ -1,0 +1,147 @@
+digraph G {
+	node_1 [label="-"]
+		node_1 -> node_2
+		node_1 -> node_3
+	node_3 [label="|"]
+		node_3 -> node_4
+		node_3 -> node_5
+	node_5 [label="|"]
+		node_5 -> node_6
+		node_5 -> node_7
+	node_7 [label="|"]
+		node_7 -> node_8
+		node_7 -> node_9
+	node_9 [label="*"]
+		node_9 -> node_10
+		node_9 -> node_11
+	node_11 [label="*"]
+		node_11 -> node_12
+		node_11 -> node_13
+	node_13 [label="*"]
+		node_13 -> node_14
+		node_13 -> node_15
+	node_15 [label="*"]
+		node_15 -> node_16
+		node_15 -> node_17
+	node_17[label="b"]
+	node_16[label="b"]
+	node_14[label="."]
+	node_12[label="."]
+	node_10[label="a"]
+	node_8 [label="*"]
+		node_8 -> node_18
+		node_8 -> node_11
+	node_18[label="b"]
+	node_6 [label="|"]
+		node_6 -> node_19
+		node_6 -> node_20
+	node_20 [label="|"]
+		node_20 -> node_21
+		node_20 -> node_22
+	node_22 [label="|"]
+		node_22 -> node_23
+		node_22 -> node_24
+	node_24 [label="*"]
+		node_24 -> node_25
+		node_24 -> node_26
+	node_26 [label="*"]
+		node_26 -> node_27
+		node_26 -> node_28
+	node_28 [label="*"]
+		node_28 -> node_29
+		node_28 -> node_30
+	node_30 [label="*"]
+		node_30 -> node_31
+		node_30 -> node_32
+	node_32[label="a"]
+	node_31[label="."]
+	node_29[label="b"]
+	node_27[label="."]
+	node_25[label="b"]
+	node_23 [label="*"]
+		node_23 -> node_33
+		node_23 -> node_34
+	node_34 [label="*"]
+		node_34 -> node_35
+		node_34 -> node_36
+	node_36 [label="*"]
+		node_36 -> node_37
+		node_36 -> node_38
+	node_38 [label="*"]
+		node_38 -> node_39
+		node_38 -> node_40
+	node_40[label="a"]
+	node_39[label="."]
+	node_37[label="."]
+	node_35[label="a"]
+	node_33[label="b"]
+	node_21 [label="*"]
+		node_21 -> node_41
+		node_21 -> node_42
+	node_42 [label="*"]
+		node_42 -> node_43
+		node_42 -> node_44
+	node_44 [label="*"]
+		node_44 -> node_45
+		node_44 -> node_46
+	node_46 [label="*"]
+		node_46 -> node_47
+		node_46 -> node_48
+	node_48[label="."]
+	node_47[label="a"]
+	node_45[label="a"]
+	node_43[label="b"]
+	node_41[label="b"]
+	node_19 [label="*"]
+		node_19 -> node_49
+		node_19 -> node_50
+	node_50 [label="*"]
+		node_50 -> node_51
+		node_50 -> node_52
+	node_52 [label="*"]
+		node_52 -> node_53
+		node_52 -> node_54
+	node_54 [label="*"]
+		node_54 -> node_55
+		node_54 -> node_56
+	node_56[label="."]
+	node_55[label="a"]
+	node_53[label="."]
+	node_51[label="."]
+	node_49[label="b"]
+	node_4 [label="|"]
+		node_4 -> node_57
+		node_4 -> node_58
+	node_58 [label="|"]
+		node_58 -> node_59
+		node_58 -> node_60
+	node_60 [label="*"]
+		node_60 -> node_61
+		node_60 -> node_26
+	node_61[label="a"]
+	node_59 [label="*"]
+		node_59 -> node_62
+		node_59 -> node_34
+	node_62[label="a"]
+	node_57 [label="*"]
+		node_57 -> node_63
+		node_57 -> node_42
+	node_63[label="a"]
+	node_2 [label="*"]
+		node_2 -> node_64
+		node_2 -> node_65
+	node_65 [label="*"]
+		node_65 -> node_66
+		node_65 -> node_67
+	node_67 [label="*"]
+		node_67 -> node_68
+		node_67 -> node_69
+	node_69 [label="*"]
+		node_69 -> node_70
+		node_69 -> node_71
+	node_71[label="."]
+	node_70[label="."]
+	node_68[label="."]
+	node_66[label="."]
+	node_64[label="."]
+}

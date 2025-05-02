@@ -1,0 +1,7 @@
+digraph G {
+node_0 [shape=circle,label="0: 0"];
+	node_0 -> node_1 [label="a"];
+	node_0 -> node_2 [label="b"];
+node_2 [shape=circle,label="2: 2"];
+node_1 [shape=circle,label="1: 1"];
+}

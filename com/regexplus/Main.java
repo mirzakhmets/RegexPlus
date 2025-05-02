@@ -1628,7 +1628,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestSix("case1.cnf"); // 237 sec, 108 sec
+        SATTestSix("case2.cnf"); // 237 sec, 108 sec
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");

@@ -15,6 +15,7 @@ public class StateMinus extends State {
     int counterVisitIndex;
     boolean passedComputed = false, passed = false;
     public Tag matchingTag = null;
+    public boolean[] visitedAll = new boolean[2];
 
     public StateMinus() {
         super();
@@ -35,9 +36,19 @@ public class StateMinus extends State {
             //this.visited = new boolean[this.getInputEdges().size()];
             //Arrays.fill(visited, false);
             this.visited.clear();
+
+            this.visitedAll[0] = this.visitedAll[1] = false;
         }
+
+        visitedAll[1 - this.getInputEdges().indexOf(edge)] = true;
+
+        return !this.visitedAll[0] && this.visitedAll[1];
+
         //visited[this.getInputEdges().size() - 1 - this.getInputEdges().indexOf(edge)] = true;
         //return !visited[0] && visited[1];
+
+        // tags
+        /*
         for (Tag t : ((State) edge.getStart()).tags.values()) {
             if (t.finalState == this) {
                 boolean[] v = null;
@@ -62,5 +73,7 @@ public class StateMinus extends State {
             }
         }
         return false;
+        */
+        // tags
     }
 }
