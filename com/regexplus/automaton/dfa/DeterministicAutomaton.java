@@ -78,9 +78,9 @@ public class DeterministicAutomaton {
 
                     System.out.println("SATSIFIABLE");
 
-                    break;
+                    //break;
 
-                    //System.exit(0);
+                    System.exit(0);
                 }
 
 
