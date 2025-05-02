@@ -1544,11 +1544,11 @@ public class Main {
 
         System.gc();
 
-        /*
+
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
                     File("pattern.gv")));
-            Case.writeNode(bw, resultNode);
+            Case.writeNode(bw, new NodeMinus(Parser.ParseFromString(pad(n)), Parser.ParseFromString(pps).derivative()));
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -1560,7 +1560,7 @@ public class Main {
 
             Automaton a2 = new Automaton();
 
-            a2.build((Node) stateNode);
+            a2.build((Node) new NodeMinus(Parser.ParseFromString(pad(n)), Parser.ParseFromString(pps).derivative()));
 
             Case.writeState(bw, a2.getStart());
 
@@ -1568,8 +1568,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-         */
 
         DeterministicAutomaton deterministicAutomaton = new
                 DeterministicAutomaton(automaton);
@@ -1630,7 +1628,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestSix("trivial2.cnf"); // 237 sec, 108 sec
+        SATTestSix("case1.cnf"); // 237 sec, 108 sec
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
