@@ -58,7 +58,7 @@ public class NodeChoice extends NodePaired {
 
         new EdgeEmpty(d[0], finish[0]);
 
-        this.expanded = true;
+        this.setExpanded();
         this.expandedStates[0] = a[0];
         this.expandedStates[1] = d[0];
 
@@ -69,7 +69,9 @@ public class NodeChoice extends NodePaired {
     public INode derivative() {
         Set<INode> nodes = new HashSet<>();
 
-        for (byte i : Main.alphabet.getBytes()) {
+        byte[] t = Main.alphabet.getBytes();
+
+        for (byte i : t) {
             INode r = this.left.derivative((char) i);
 
             if (r != null) {

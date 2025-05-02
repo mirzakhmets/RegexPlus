@@ -16,8 +16,6 @@ import java.util.*;
 
 public class DeterministicState {
     public static final int LETTER_MAX = 256;
-    public static int VISIT_INDEX = -1;
-    public static int NFA_VISIT_INDEX = -1;
     public int index;
     public Set<State> states = new HashSet<>();
     public DeterministicState[] transitions = new
@@ -29,29 +27,26 @@ public class DeterministicState {
     public List<IMatch> matches = new ArrayList<>();
     public List<State> orderedStates = new ArrayList<>();
     public List<InputEdge> inputEdges = new ArrayList<>();
-
+    public static int VISIT_INDEX = -1;
+    public static int NFA_VISIT_INDEX = -1;
     public DeterministicState(DeterministicAutomaton automaton) {
         this.index = -1;
         this.automaton = automaton;
     }
-
-    public boolean closure() {
-        for (State s : this.automaton.nfaStates) {
+    public void closure() {
+        for (State s: this.automaton.nfaStates) {
             s.tags.clear();
         }
-        for (StateTagPair tag : this.tags) {
+        for (StateTagPair tag: this.tags) {
             tag.state.tags.putAll(tag.tags);
         }
         Stack<State> stack = new Stack<>();
         ++NFA_VISIT_INDEX;
         Collections.reverse(this.orderedStates);
-        for (State s : this.orderedStates) {
+        for (State s: this.orderedStates) {
             stack.push(s);
             s.setVisitIndex(NFA_VISIT_INDEX);
         }
-
-        Set<StateAnd> andStates = new HashSet<>();
-
         while (!stack.empty()) {
             State state = stack.pop();
             if (!this.states.contains(state)) {
@@ -84,10 +79,11 @@ public class DeterministicState {
                 ((State) state.getOutputEdges().get(0).getFinish()).addTag(ta);
                 ((State) state.getOutputEdges().get(1).getFinish()).addTag(tb);
             }
-            for (IEdge edge : state.getOutputEdges()) {
+            for (IEdge edge: state.getOutputEdges()) {
                 if (edge.getType() == EdgeType.EMPTY && ((State)
                         edge.getFinish()).getVisitIndex() != NFA_VISIT_INDEX
-                        && !this.states.contains((State) edge.getFinish())) {
+                        && !this.states.contains((State) edge.getFinish()))
+                {
                     State outState = (State) edge.getFinish();
                     boolean prePass = true;
                     outState.assignTags(state);
@@ -97,18 +93,6 @@ public class DeterministicState {
                     if (outState.getType() == StateType.AND) {
                         StateAnd outStateAnd = (StateAnd) outState;
                         prePass = outStateAnd.visit(NFA_VISIT_INDEX, edge);
-
-                        if (!andStates.contains(outStateAnd)) {
-                            andStates.add(outStateAnd);
-                        } else {
-                            if (!prePass) {
-                                System.out.println("UNSATSIFIABLE");
-
-                                //System.exit(0);
-
-                                return false;
-                            }
-                        }
                     }
                     if (outState.getType() == StateType.MINUS) {
                         StateMinus outStateMinus = (StateMinus) outState;
@@ -125,25 +109,15 @@ public class DeterministicState {
                 }
             }
         }
-
-        /*
-        for (StateAnd sa : andStates) {
-            if (!(sa.visitedAll[0] && sa.visitedAll[1])) {
-                return false;
-            }
-        }*/
-
-        return true;
     }
-
     public DeterministicState step(char symbol) {
         //List<State> result = new ArrayList<>();
         DeterministicState deterministicState = new
                 DeterministicState(this.automaton);
         //List<StateTagPair> pairs = new ArrayList<>();
         ++NFA_VISIT_INDEX;
-        for (State s : this.orderedStates) {
-            for (IEdge e : s.getOutputEdges()) {
+        for (State s: this.orderedStates) {
+            for (IEdge e: s.getOutputEdges()) {
                 if (e.getType() == EdgeType.LETTER && e.accepts(symbol)) {
                     if (((State) e.getFinish()).getVisitIndex() !=
                             NFA_VISIT_INDEX && !deterministicState.states.contains((State)
@@ -171,20 +145,15 @@ public class DeterministicState {
         //deterministicState.states.addAll(result);
         //deterministicState.orderedStates = result;
         //deterministicState.tags.addAll(pairs);
-        if (!deterministicState.closure()) {
-            System.out.println("UNSATISFIABLE");
-
-            System.exit(0);
-            //return null;
-        }
- /*
- if (!deterministicState.automaton.states.contains(deterministicState)) {
- deterministicState.index =
+        deterministicState.closure();
+        /*
+        if (!deterministicState.automaton.states.contains(deterministicState)) {
+            deterministicState.index =
 deterministicState.automaton.states.size();
- deterministicState.automaton.states.add(deterministicState);
- return deterministicState;
- }*/
-        for (DeterministicState s : this.automaton.states) {
+            deterministicState.automaton.states.add(deterministicState);
+            return deterministicState;
+        }*/
+        for (DeterministicState s: this.automaton.states) {
             if (s.hashCode() == deterministicState.hashCode()) {
                 return s;
             }
@@ -194,46 +163,45 @@ deterministicState.automaton.states.size();
         return deterministicState;
         //return null;
     }
-
     @Override
     public int hashCode() {
         int result = 0;
-        for (State state : this.states) {
+        for (State state: this.states) {
             result = (result << 12) ^ state.getIndex() ^ (result >> 20);
             //result = (result * 257 + state.getIndex()) % 100001;
         }
         return result;
     }
-
     public List<IMatch> matches() {
         return this.matches;
     }
-
     public void setMatches(List<IMatch> matches) {
         this.matches = new ArrayList<>();
-        for (IMatch match : matches) {
+        for (IMatch match: matches) {
             this.matches.add(match.copy());
         }
         //this.matches = matches;
     }
-
     public String label() {
-        String result = "";
-        for (State s : this.orderedStates) {
+        /*String result = "";
+        for (State s: this.orderedStates) {
             if (result.length() > 0) {
                 result += " ";
             }
             result += "" + s.getIndex();
         }
-        return result;
-    }
+        return result;*/
+        return "" + this.index;
 
+    }
     public void write(OutputStream stream) {
         try {
             if (this.isFinal) {
-                stream.write(("node_" + this.index + " [shape=doublecircle,label=\"" + this.index /*+ ": " + this.label()*/ + "\"];\n").getBytes());
+                stream.write(("node_" + this.index + " [shape=doublecircle,label=\"" + this.index + ": " + this.label() +
+                        "\"];\n").getBytes());
             } else {
-                stream.write(("node_" + this.index + " [shape=circle,label=\"" + this.index /*+ ": " + this.label()*/ + "\"];\n").getBytes());
+                stream.write(("node_" + this.index + " [shape=circle,label=\"" +
+                        this.index + ": " + this.label() + "\"];\n").getBytes());
             }
         } catch (Exception e) {
             e.printStackTrace();

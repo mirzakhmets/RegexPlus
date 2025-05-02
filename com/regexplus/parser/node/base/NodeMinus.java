@@ -58,7 +58,7 @@ public class NodeMinus extends NodePaired {
         a[0].getInputEdges().add(edgea);
         c[0].getInputEdges().add(edgec);
 
-        this.expanded = true;
+        this.setExpanded();
         this.expandedStates[0] = f[0];
         this.expandedStates[1] = e[0];
 

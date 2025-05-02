@@ -111,4 +111,8 @@ public class Node implements INode {
     public INode derivative(char ch) {
         return null;
     }
+
+    protected void setExpanded() {
+        this.expanded = true;
+    }
 }

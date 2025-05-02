@@ -91,7 +91,7 @@ public class NodeRepeat extends Node {
         }
         new EdgeEmpty(b[0], finish[0]);
 
-        this.expanded = true;
+        this.setExpanded();
         this.expandedStates[0] = a[0];
         this.expandedStates[1] = b[0];
 

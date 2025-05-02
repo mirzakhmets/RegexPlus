@@ -56,7 +56,7 @@ public class NodeAnyLetter extends Node {
         new EdgeEmpty(start[0], sta[0]);
         new EdgeEmpty(stb[0], finish[0]);
 
-        this.expanded = true;
+        this.setExpanded();
         this.expandedStates[0] = sta[0];
         this.expandedStates[1] = stb[0];
 

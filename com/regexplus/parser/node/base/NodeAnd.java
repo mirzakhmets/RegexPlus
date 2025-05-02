@@ -58,7 +58,7 @@ public class NodeAnd extends NodePaired {
         new EdgeEmpty(d[0], e[0]);
         new EdgeEmpty(e[0], finish[0]);
 
-        this.expanded = true;
+        this.setExpanded();
         this.expandedStates[0] = f[0];
         this.expandedStates[1] = e[0];
 
@@ -69,7 +69,9 @@ public class NodeAnd extends NodePaired {
     public INode derivative() {
         Set<INode> nodes = new HashSet<>();
 
-        for (byte i : Main.alphabet.getBytes()) {
+        byte[] t = Main.alphabet.getBytes();
+
+        for (byte i : t) {
             INode r = this.left.derivative((char) i);
             Set<INode> newNodes = new HashSet<>();
 
@@ -132,6 +134,10 @@ public class NodeAnd extends NodePaired {
         }
 
         if (list.isEmpty()) {
+            return null;
+        }
+
+        if (list.size() != 2) {
             return null;
         }
 

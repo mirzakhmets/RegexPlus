@@ -47,7 +47,7 @@ public class NodeConcat extends NodePaired {
         new EdgeEmpty(b[0], c[0]);
         new EdgeEmpty(d[0], finish[0]);
 
-        this.expanded = true;
+        this.setExpanded();
         this.expandedStates[0] = a[0];
         this.expandedStates[1] = d[0];
 

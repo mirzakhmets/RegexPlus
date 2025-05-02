@@ -11,6 +11,8 @@ import com.regexplus.parser.IParserStream;
 import com.regexplus.parser.Parser;
 import com.regexplus.parser.ParserInputStream;
 import com.regexplus.parser.node.base.NodeAnd;
+import com.regexplus.parser.node.base.NodeChoice;
+import com.regexplus.parser.node.base.NodeLetter;
 import com.regexplus.parser.node.common.INode;
 import com.regexplus.parser.node.model.Node;
 import com.regexplus.test.Case;
@@ -1227,9 +1229,10 @@ public class Main {
     public static void SATTestFive(String fileName) {
         long t = System.currentTimeMillis();
 
-        INode resultNode = null;
+        INode resultNode = null, stateNode = null;
 
         Vector<INode> v = new Vector<>();
+        Vector<INode> vb = new Vector<>();
 
         try {
             BufferedReader rd = new BufferedReader(new FileReader(fileName));
@@ -1278,7 +1281,7 @@ public class Main {
 
                     ss += ps;
                 }
-                */
+                 */
 
                 ArrayList<Integer> numbers = new ArrayList<>();
 
@@ -1345,15 +1348,24 @@ public class Main {
                     ss += ps;
                 }
 
-                INode currentNode = Parser.ParseFromString(ss).derivative();
+                INode currentNode = Parser.ParseFromString(ss);//.derivative();
+                INode dNode = Parser.ParseFromString(ss);
 
+                if (currentNode == null) {
+                    System.out.println("UNSATSIFIABLE");
+
+                    System.exit(0);
+                }
+
+                /*
                 if (resultNode == null) {
                     resultNode = currentNode;
                 } else {
                     resultNode = new NodeAnd(currentNode, resultNode);
-                }
+                }*/
 
                 v.add(currentNode);
+                vb.add(dNode);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1361,14 +1373,35 @@ public class Main {
 
         Automaton automaton = new Automaton();
 
-        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1).derivative();
+        //v.clear();
+
+        //v.add(new NodeAnd(new NodeChoice(new NodeLetter('a'), new NodeLetter('a')), new NodeLetter('b')));
+
+        resultNode = GenerateOptimalNodes(v, 0, v.size() - 1);//.derivative();
+
+        stateNode = GenerateOptimalNodes(vb, 0, vb.size() - 1);//.derivative();
 
         automaton.build((Node) resultNode);
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new
                     File("pattern.gv")));
-            Case.writeState(bw, automaton.getStart());
+            Case.writeNode(bw, resultNode);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new
+                    File("nfa.gv")));
+
+            Automaton a2 = new Automaton();
+
+            a2.build((Node) stateNode);
+
+            Case.writeState(bw, a2.getStart());
+
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -1433,7 +1466,7 @@ public class Main {
 
         //testDerivativeOne("(a(a|b)(a|b))|((a|b)a(a|b))|((a|b)(a|b)a)");
         //testDerivativeOne("(a..)&(.a.)&(..a)");
-        SATTestFive("timetable5.cnf");
+        SATTestFive("small.cnf");
 
         if (args.length < 2) {
             System.out.println("Regex+ - Usage: <pattern> <file name>");
