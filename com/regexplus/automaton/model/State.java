@@ -16,6 +16,7 @@ public class State implements IState {
     ArrayList<IEdge> inputEdges, outputEdges;
     List<IMatch> matches;
     public int logicalChoiceIndex  = -1;
+    public boolean frozen = true;
 
     public State() {
         this.index = -1;

@@ -23,6 +23,8 @@ public class DeterministicAutomaton {
     public Map<Integer, State> nfaStatesIndex = new HashMap<>();
     public DeterministicAutomaton(Automaton automaton) {
         Stack<State> stack = new Stack<>();
+
+
         stack.push((State) automaton.getStart());
         int index = 0;
         while (!stack.empty()) {
@@ -48,6 +50,15 @@ public class DeterministicAutomaton {
         Stack<DeterministicState> detStack = new Stack<>();
         detStack.push(this.start);
         this.start.visitIndex = ++DeterministicState.VISIT_INDEX;
+
+        for (State s : this.nfaStates) {
+            s.frozen = true;
+        }
+
+        for (State s : this.start.states) {
+            s.frozen = false;
+        }
+
         while (!detStack.empty()) {
             DeterministicState state = detStack.pop();
 

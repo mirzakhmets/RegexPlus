@@ -57,6 +57,11 @@ public class DeterministicState {
         }
         while (!stack.empty()) {
             State state = stack.pop();
+
+            //if (state.frozen) {
+            //    continue;
+            //}
+
             if (!this.states.contains(state)) {
                 this.states.add(state);
                 this.orderedStates.add(state);
@@ -128,13 +133,17 @@ public class DeterministicState {
 
                         minusTag = outStateMinus.matchingTag;
                     }
-                    if (outState.getVisitIndex() != NFA_VISIT_INDEX &&
+
+                    if (outState.getVisitIndex() != NFA_VISIT_INDEX
+                            &&
                             prePass && (!minus || (minus && /*minusTag.type != 0*/minusIndex != 1))) {
                         outState.setVisitIndex(NFA_VISIT_INDEX);
                         stack.push(outState);
                         if (Match.isBetter(state.matches(), outState.matches())) {
                             outState.setMatches(state.matches());
                         }
+
+                        outState.frozen = false;
                     }
                 }
             }
@@ -147,11 +156,19 @@ public class DeterministicState {
         //List<StateTagPair> pairs = new ArrayList<>();
         ++NFA_VISIT_INDEX;
         for (State s: this.orderedStates) {
+
+            //if (s.frozen) {
+            //    continue;
+            //}
+
             for (IEdge e: s.getOutputEdges()) {
                 if (e.getType() == EdgeType.LETTER && e.accepts(symbol)) {
+                    ((State) e.getFinish()).frozen = false;
+
                     if (((State) e.getFinish()).getVisitIndex() !=
                             NFA_VISIT_INDEX && !deterministicState.states.contains((State)
                             e.getFinish())) {
+
                         ((State) e.getFinish()).setVisitIndex(NFA_VISIT_INDEX);
 
                         // tags;
@@ -169,6 +186,8 @@ public class DeterministicState {
                         deterministicState.states.add((State) e.getFinish());
                         deterministicState.orderedStates.add((State) e.getFinish());
                     }
+                } else {
+                    ((State) e.getFinish()).frozen = true;
                 }
             }
         }
